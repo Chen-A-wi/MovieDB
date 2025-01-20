@@ -8,6 +8,15 @@ repositories {
     mavenCentral()
 }
 
+gradlePlugin {
+    plugins {
+        create("AppPlugin") {
+            id = "com.awilab.appplugin"
+            implementationClass = "com.awilab.baseplugin.common.AppPlugin"
+        }
+    }
+}
+
 dependencies {
     implementation(libs.gradle.tools.build)
     implementation(libs.kotlin.gradle.plugin)
