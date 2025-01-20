@@ -9,6 +9,7 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+        includeBuild("baseplugin")
     }
 }
 dependencyResolutionManagement {
@@ -16,9 +17,11 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url = uri("https://plugins.gradle.org/m2/")
+        }
     }
 }
 
 rootProject.name = "MovieDB"
 include(":app")
- 
