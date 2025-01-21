@@ -20,5 +20,5 @@ gradlePlugin {
 dependencies {
     implementation(libs.gradle.tools.build)
     implementation(libs.kotlin.gradle.plugin)
-    implementation(files((libs as Any).javaClass))
+    implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }

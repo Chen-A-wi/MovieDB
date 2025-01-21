@@ -8,5 +8,5 @@ object Version {
     const val TARGET_SDK = 34
     const val VERSION_CODE = 1
     const val VERSION_NAME = "1.0"
-    val jdk = JavaVersion.VERSION_19
+    val jdk = JavaVersion.VERSION_17
 }
