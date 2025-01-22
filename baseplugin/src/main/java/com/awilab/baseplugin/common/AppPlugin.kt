@@ -16,6 +16,7 @@ class AppPlugin : Plugin<Project> {
             val libs = the<LibrariesForLibs>()
 
             with(pluginManager) {
+                apply(libs.plugins.ksp.get().pluginId)
                 apply(libs.plugins.android.application.get().pluginId)
                 apply(libs.plugins.kotlin.android.get().pluginId)
                 apply(libs.plugins.kotlin.serialization.get().pluginId)
@@ -33,6 +34,10 @@ class AppPlugin : Plugin<Project> {
                 }
 
                 configureAndroid()
+
+                buildFeatures {
+                    compose = true
+                }
 
                 buildTypes {
                     release {
@@ -56,6 +61,12 @@ class AppPlugin : Plugin<Project> {
                 "implementation"(libs.androidx.core.ktx)
                 "implementation"(libs.androidx.lifecycle.runtime.ktx)
                 "implementation"(libs.kotlinx.serialization.json)
+
+                //region Hilt
+                "implementation"(libs.androidx.hilt.navigation.compose)
+                "implementation"(libs.hilt.android)
+                "ksp"(libs.hilt.compiler)
+                //endregion
 
                 "testImplementation"(libs.junit)
                 "androidTestImplementation"(libs.androidx.junit)
