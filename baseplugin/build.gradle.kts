@@ -14,6 +14,10 @@ gradlePlugin {
             id = "com.awilab.appplugin"
             implementationClass = "com.awilab.baseplugin.common.AppPlugin"
         }
+        create("BaseLibPlugin") {
+            id = "com.awilab.baselibplugin"
+            implementationClass = "com.awilab.baseplugin.common.BaseLibPlugin"
+        }
         create("ComposePlugin") {
             id = "com.awilab.composeplugin"
             implementationClass = "com.awilab.baseplugin.common.ComposePlugin"
