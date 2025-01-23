@@ -1,4 +1,4 @@
-package com.awilab.moviedb
+package com.awilab.moviedb.ui.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

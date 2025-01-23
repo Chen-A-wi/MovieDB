@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MovieDB</string>
+    <string name="lab_home">Home</string>
+    <string name="lab_search">Search</string>
 </resources>

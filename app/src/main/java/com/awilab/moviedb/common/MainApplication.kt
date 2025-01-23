@@ -1,4 +1,4 @@
-package com.awilab.moviedb
+package com.awilab.moviedb.common
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
