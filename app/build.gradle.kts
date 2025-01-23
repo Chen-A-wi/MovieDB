@@ -17,3 +17,7 @@ android {
         jvmTarget = Version.jdk.toString()
     }
 }
+
+dependencies {
+    implementation(project(":common"))
+}

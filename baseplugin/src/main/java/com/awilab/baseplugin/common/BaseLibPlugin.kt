@@ -17,6 +17,8 @@ class BaseLibPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply(libs.plugins.android.library.get().pluginId)
                 apply(libs.plugins.kotlin.android.get().pluginId)
+                apply(libs.plugins.ksp.get().pluginId)
+                apply(libs.plugins.hilt.get().pluginId)
             }
 
             extensions.configure<LibraryExtension> {
@@ -38,6 +40,12 @@ class BaseLibPlugin : Plugin<Project> {
                 "implementation"(libs.androidx.core.ktx)
                 "implementation"(libs.androidx.appcompat)
                 "implementation"(libs.material)
+
+                //region Hilt
+                "implementation"(libs.androidx.hilt.navigation.compose)
+                "implementation"(libs.hilt.android)
+                "ksp"(libs.hilt.compiler)
+                //endregion
 
                 "testImplementation"(libs.junit)
                 "androidTestImplementation"(libs.androidx.junit)
