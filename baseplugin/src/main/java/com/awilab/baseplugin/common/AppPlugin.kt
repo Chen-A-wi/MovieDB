@@ -16,10 +16,11 @@ class AppPlugin : Plugin<Project> {
             val libs = the<LibrariesForLibs>()
 
             with(pluginManager) {
-                apply(libs.plugins.ksp.get().pluginId)
                 apply(libs.plugins.android.application.get().pluginId)
                 apply(libs.plugins.kotlin.android.get().pluginId)
                 apply(libs.plugins.kotlin.serialization.get().pluginId)
+                apply(libs.plugins.ksp.get().pluginId)
+                apply(libs.plugins.hilt.get().pluginId)
             }
 
             extensions.configure<ApplicationExtension> {

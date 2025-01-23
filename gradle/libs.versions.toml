@@ -20,7 +20,7 @@ kotlinxSerialization = "1.8.0"
 kotlinxSerializationPlugin = "2.1.0"
 
 # Hilt
-hilt = "2.51.1"
+hilt = "2.55"
 androidxHiltNavigationCompose = "1.2.0"
 
 [libraries]
@@ -65,3 +65,4 @@ jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrai
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
