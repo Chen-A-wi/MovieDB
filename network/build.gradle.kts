@@ -2,6 +2,7 @@ import com.awilab.baseplugin.configs.Version
 
 plugins {
     id("com.awilab.baselibplugin")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -13,5 +14,9 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.retrofit2)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.serialization.retrofit)
 }

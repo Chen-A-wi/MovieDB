@@ -28,3 +28,4 @@ rootProject.name = "MovieDB"
 include(":app")
 include(":common")
 include(":network")
+include(":data")
