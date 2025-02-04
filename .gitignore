@@ -12,6 +12,7 @@ local.properties
 captures/
 .externalNativeBuild/
 .cxx/
+.kotlin/
 *.apk
 output.json
 
@@ -31,3 +32,6 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+# Default
+.DS_Store
