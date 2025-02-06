@@ -1,6 +1,5 @@
 package com.awilab.network.di
 
-import com.awilab.common.extension.shouldBe
 import com.awilab.network.service.SearchService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module

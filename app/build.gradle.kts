@@ -23,4 +23,6 @@ dependencies {
     implementation(project(":network"))
     implementation(project(":data"))
     implementation(project(":domain"))
+
+    implementation(libs.androidx.navigation.compose)
 }
