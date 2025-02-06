@@ -1,11 +1,11 @@
 package com.awilab.domain.repository
 
 import com.awilab.network.ApiResponse
-import com.awilab.network.model.SearchResponse
+import com.awilab.network.model.SearchResults
 import kotlinx.coroutines.flow.Flow
 
 interface SearchRepository {
-    fun searchMovieList(
+    fun searchMovie(
         query: String,
-    ): Flow<ApiResponse<SearchResponse>>
+    ): Flow<ApiResponse<SearchResults>>
 }

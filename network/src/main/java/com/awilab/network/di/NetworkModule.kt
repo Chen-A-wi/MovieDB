@@ -1,5 +1,6 @@
 package com.awilab.network.di
 
+import com.awilab.common.extension.shouldBe
 import com.awilab.network.service.SearchService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -23,6 +24,10 @@ internal const val BASE_URL = "https://api.themoviedb.org/3/"
 @Module
 class NetworkModule {
 
+    private fun <T> Retrofit.createService(clazz: Class<T>): T {
+        return this.create(clazz)
+    }
+
     @Provides
     @Singleton
     fun provideJsonConverterFactory(): Converter.Factory {
@@ -30,7 +35,8 @@ class NetworkModule {
             ignoreUnknownKeys = true // skip unknown json key
             coerceInputValues = true // null default
             prettyPrint = true // format
-            encodeDefaults = true
+            encodeDefaults = true //序列化
+            allowSpecialFloatingPointValues = true // allow special float value
         }
 
         return jsonBuilder.asConverterFactory("application/json".toMediaType())
@@ -72,10 +78,6 @@ class NetworkModule {
     fun provideSearchService(
         retrofit: Retrofit,
     ): SearchService {
-        return retrofit.createService<SearchService>()
-    }
-
-    private inline fun <reified T> Retrofit.createService(): T {
-        return this.create(T::class.java)
+        return retrofit.createService(SearchService::class.java)
     }
 }

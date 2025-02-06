@@ -5,8 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.awilab.domain.repository.SearchRepository
 import com.awilab.network.ApiResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,7 +15,7 @@ class MainViewModel @Inject constructor(
 
     fun test() {
         viewModelScope.launch {
-            searchRepository.searchMovieList("Jack")
+            searchRepository.searchMovie("Jack")
                 .collect { response ->
                     when(response) {
                         is ApiResponse.Loading -> {
