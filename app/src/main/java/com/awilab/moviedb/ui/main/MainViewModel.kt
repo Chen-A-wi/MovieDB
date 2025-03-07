@@ -29,6 +29,10 @@ class MainViewModel @Inject constructor(
                         is ApiResponse.Success -> {
                             println("================= Success: ${response.data}")
                         }
+
+                        else -> {
+                            println("================= else ==================")
+                        }
                     }
                 }
         }

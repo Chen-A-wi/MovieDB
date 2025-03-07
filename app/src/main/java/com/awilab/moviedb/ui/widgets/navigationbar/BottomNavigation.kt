@@ -1,6 +1,8 @@
 package com.awilab.moviedb.ui.widgets.navigationbar
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -29,11 +31,7 @@ fun BottomNavBar(
                 onClick = { navController.navigateSingleTopTo(item.route) },
                 icon = {
                     Icon(
-                        imageVector = if (item.route == currentDestination) {
-                            item.icon
-                        } else {
-                            item.icon
-                        },
+                        imageVector = item.icon ?: Icons.Filled.Home,
                         contentDescription = stringResource(id = item.title),
                     )
                 },
