@@ -4,6 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -13,8 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.awilab.moviedb.common.navigation.MovieDbDestination
 import com.awilab.moviedb.common.navigation.MovieDbNavHost
+import com.awilab.moviedb.common.navigation.bottomNavPages
 import com.awilab.moviedb.ui.theme.MovieDBTheme
 import com.awilab.moviedb.ui.widgets.navigationbar.BottomNavBar
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,14 +32,15 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
 
             MovieDBTheme {
-                Scaffold(modifier = Modifier.fillMaxSize(),
+                Scaffold(modifier = Modifier
+                    .fillMaxSize(),
                     bottomBar = {
-
                         val currentRoute = currentRoute(navController)
-                        if (currentRoute in listOf(
-                                MovieDbDestination.HomeDestination.route,
-                                MovieDbDestination.SearchDestination.route
-                            )
+
+                        AnimatedVisibility(
+                            visible = bottomNavPages.any { it.route == currentRoute },
+                            enter = slideInVertically(initialOffsetY = { it }),
+                            exit = slideOutVertically(targetOffsetY = { it })
                         ) {
                             BottomNavBar(navController = navController)
                         }
@@ -55,5 +59,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun currentRoute(navController: NavHostController): String? {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
+
     return navBackStackEntry?.destination?.route
 }
