@@ -17,6 +17,6 @@ fun NavGraphBuilder.bottomNavGraph(navController: NavHostController) {
 fun NavGraphBuilder.searchGraph(navController: NavHostController) {
     navigation(startDestination = MovieDbDestination.SearchDestination.route, route = "search") {
         composable(MovieDbDestination.SearchDestination.route) { SearchPage(navController = navController) }
-        composable(MovieDbDestination.DetailDestination.route) { DetailPage() }
+        composable(MovieDbDestination.DetailDestination.route) { DetailPage(navController = navController) }
     }
 }
