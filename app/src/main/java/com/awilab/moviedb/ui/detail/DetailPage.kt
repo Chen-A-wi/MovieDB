@@ -16,15 +16,15 @@ import com.awilab.moviedb.ui.widgets.AppBar
 @Composable
 fun DetailPage(
     vm: DetailViewModel = hiltViewModel(),
-    navController: NavHostController
 ) {
     Scaffold(
         topBar = {
             AppBar(titleRes = R.string.lab_detail,
                 showBack = true,
                 onBack = {
-                    navController.popBackStack()
-                })
+                    vm.navigator.goBack()
+                }
+            )
         },
         modifier = Modifier.fillMaxSize(),
     ) { innerPadding ->

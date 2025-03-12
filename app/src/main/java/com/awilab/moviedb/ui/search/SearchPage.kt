@@ -17,7 +17,6 @@ import com.awilab.moviedb.ui.widgets.AppBar
 @Composable
 fun SearchPage(
     vm: SearchViewModel = hiltViewModel(),
-    navController: NavHostController
 ) {
     Scaffold(
         topBar = {
@@ -32,7 +31,7 @@ fun SearchPage(
                 },
         ) {
             Text(text = "Hello Search Screen", modifier = Modifier.clickable {
-                navController.navigate(MovieDbDestination.DetailDestination.route)
+                vm.navigator.navigate(MovieDbDestination.DetailDestination.route)
             })
         }
     }

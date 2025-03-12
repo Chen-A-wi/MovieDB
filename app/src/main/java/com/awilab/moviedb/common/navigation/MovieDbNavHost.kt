@@ -15,7 +15,7 @@ fun MovieDbNavHost(
         startDestination = MovieDbDestination.HomeDestination.route,
         modifier = modifier,
     ) {
-        bottomNavGraph(navController)
-        searchGraph(navController)
+        bottomNavGraph()
+        searchGraph()
     }
 }
