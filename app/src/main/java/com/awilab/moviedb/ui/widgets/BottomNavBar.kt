@@ -1,4 +1,4 @@
-package com.awilab.moviedb.ui.widgets.navigationbar
+package com.awilab.moviedb.ui.widgets
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
@@ -10,25 +10,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import com.awilab.common.extension.navigateSingleTopTo
 import com.awilab.moviedb.common.navigation.MovieDbDestination
+import com.awilab.moviedb.common.navigation.MovieDbNavigator
 import com.awilab.moviedb.common.navigation.bottomNavPages
 
 @Composable
 fun BottomNavBar(
-    navController: NavHostController,
+    navigator: MovieDbNavigator,
     bottomNavList: List<MovieDbDestination> = bottomNavPages,
 ) {
-    val currentDestination = navController.currentBackStackEntryAsState().value?.destination?.route
-
     NavigationBar(modifier = Modifier.fillMaxWidth()) {
         bottomNavList.forEach { item ->
             NavigationBarItem(
-                selected = currentDestination == item.route,
-                onClick = { navController.navigateSingleTopTo(item.route) },
+                selected = navigator.getCurrentRoute() == item.route,
+                onClick = { navigator.navigateSingleTopTo(item.route) },
                 icon = {
                     Icon(
                         imageVector = item.icon ?: Icons.Filled.Home,

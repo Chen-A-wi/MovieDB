@@ -1,7 +1,6 @@
 package com.awilab.moviedb.ui.home
 
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
 import com.awilab.moviedb.common.navigation.MovieDbNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
