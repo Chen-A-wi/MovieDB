@@ -1,7 +1,10 @@
 package com.awilab.moviedb.common.navigation
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.navigation.ActivityNavigator
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import javax.inject.Inject
@@ -27,6 +30,12 @@ class MovieDbNavigator @Inject constructor() {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
 
         return navBackStackEntry?.destination?.route
+    }
+
+    // 跳 Activity
+    fun launchActivity(context: Context, activity: Class<*>) {
+        val intent = Intent(context, activity)
+        context.startActivity(intent)
     }
 
     fun navigateSingleTopTo(route: String) = navController.navigate(route) {
