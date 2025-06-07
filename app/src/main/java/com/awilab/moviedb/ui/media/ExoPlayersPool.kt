@@ -8,7 +8,6 @@ class ExoPlayersPool(
   private val context: Context,
   pages: List<ComposeMediaData>,
 ) {
-
   private val players = hashMapOf<Int, ExoPlayer>()
 
   init {
