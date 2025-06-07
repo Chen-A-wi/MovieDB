@@ -24,11 +24,19 @@ fun MediaViewPager(data: List<ComposeMediaData>) {
                 .background(Color.Black),
             contentAlignment = Alignment.Center
         ) {
-            AsyncImage(
-                model = data[page].imageUri,
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize()
-            )
+            when (data[page].dataType) {
+                MediaDataType.IMAGE -> {
+                    AsyncImage(
+                        model = data[page].imageUri,
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+
+                MediaDataType.VIDEO -> {
+
+                }
+            }
         }
     }
 }

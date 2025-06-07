@@ -15,8 +15,9 @@ jetbrainsKotlinJvm = "1.9.0"
 appcompat = "1.7.0"
 material = "1.12.0"
 
-# UI
+# Media
 coil = "3.2.0"
+exoplayer = "1.7.1"
 
 # Serialization
 kotlinxSerialization = "1.8.0"
@@ -60,8 +61,12 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
-# UI
+# Media
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "exoplayer" }
+media3-exoplayer-dash = { module = "androidx.media3:media3-exoplayer-dash", version.ref = "exoplayer" }
+media3-ui = { module = "androidx.media3:media3-ui", version.ref = "exoplayer" }
+media3-compose = { module = "androidx.media3:media3-ui-compose", version.ref = "exoplayer" }
 
 # Serialization
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
@@ -80,6 +85,9 @@ coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version
 
 # Test
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
+
+[bundles]
+media3 = ["media3-exoplayer", "media3-ui", "media3-compose", "media3-exoplayer-dash"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
