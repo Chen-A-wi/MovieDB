@@ -22,17 +22,17 @@ class ComposeMediaViewModel @Inject constructor() : ViewModel() {
         ComposeMediaData(
             dataType = MediaDataType.VIDEO,
             imageUri = "https://res.cloudinary.com/deu7aohfe/image/upload/v1721377436/202407103204289410/vcxkibtbpf9cgqrugn2s.avif",
-            videoUri = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
+            videoUri = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
         ),
         ComposeMediaData(
             dataType = MediaDataType.VIDEO,
             imageUri = "https://res.cloudinary.com/deu7aohfe/image/upload/v1721377436/202407103204289410/vcxkibtbpf9cgqrugn2s.avif",
-            videoUri = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4"
+            videoUri = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4"
         ),
         ComposeMediaData(
             dataType = MediaDataType.VIDEO,
             imageUri = "https://res.cloudinary.com/deu7aohfe/image/upload/v1721377436/202407103204289410/vcxkibtbpf9cgqrugn2s.avif",
-            videoUri = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4"
+            videoUri = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4"
         ),
     )
 }
