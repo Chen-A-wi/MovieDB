@@ -24,6 +24,7 @@ class XmlMediaAdapter(
         }
 
         fun releasePlayer() {
+            exoPlayerHolder?.stop()
             exoPlayerHolder?.release()
         }
     }
