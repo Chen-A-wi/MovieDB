@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.awilab.moviedb.R
 import com.awilab.moviedb.ui.media.ComposeMediaActivity
+import com.awilab.moviedb.ui.media.xml.XmlMediaActivity
 import com.awilab.moviedb.ui.widgets.AppBar
 
 @Composable
@@ -37,7 +38,7 @@ fun HomePage(
                 modifier = Modifier.clickable {
                     vm.navigator.launchActivity(
                         context = context,
-                        activity = ComposeMediaActivity::class.java
+                        activity = XmlMediaActivity::class.java
                     )
                 },
                 text = "Hello Home Screen"
