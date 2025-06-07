@@ -17,6 +17,7 @@ internal fun Project.configureCompose(commonExtension: BaseExtension){
             "implementation"(libs.androidx.ui.graphics)
             "implementation"(libs.androidx.ui.tooling.preview)
             "implementation"(libs.androidx.material3)
+            "implementation"(libs.coil.compose)
 
             "androidTestImplementation"(platform(libs.androidx.compose.bom))
             "androidTestImplementation"(libs.androidx.ui.test.junit4)

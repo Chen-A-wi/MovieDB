@@ -25,4 +25,5 @@ dependencies {
     implementation(project(":domain"))
 
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.coil.network.okhttp)
 }

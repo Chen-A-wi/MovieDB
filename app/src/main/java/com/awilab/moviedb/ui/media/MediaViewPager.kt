@@ -11,19 +11,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
 
 @Composable
-fun MediaViewPager(data: List<String>) {
+fun MediaViewPager(data: List<ComposeMediaData>) {
     val pagerState = rememberPagerState(pageCount = { data.size })
 
     HorizontalPager(state = pagerState) { page ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(if (page % 2 == 0) Color.Blue else Color.Green),
+                .background(Color.Black),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = "Page: $page", color = Color.White, fontSize = 24.sp)
+            AsyncImage(
+                model = data[page].imageUri,
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize()
+            )
         }
     }
 }
