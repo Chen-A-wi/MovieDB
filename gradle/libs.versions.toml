@@ -16,6 +16,9 @@ jetbrainsKotlinJvm = "1.9.0"
 appcompat = "1.7.0"
 material = "1.12.0"
 
+# Balloon
+balloon = "1.6.12"
+
 # Serialization
 kotlinxSerialization = "1.8.0"
 kotlinxSerializationPlugin = "2.1.0"
@@ -57,6 +60,9 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+# Balloon
+compose-balloon = { module = "com.github.skydoves:balloon-compose", version.ref = "balloon" }
 
 # Serialization
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }

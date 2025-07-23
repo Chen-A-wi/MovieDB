@@ -17,7 +17,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             searchRepository.searchMovie("Jack")
                 .collect { response ->
-                    when(response) {
+                    when (response) {
                         is ApiResponse.Loading -> {
                             println("================= isLoading ==================")
                         }
@@ -28,10 +28,6 @@ class MainViewModel @Inject constructor(
 
                         is ApiResponse.Success -> {
                             println("================= Success: ${response.data}")
-                        }
-
-                        else -> {
-                            println("================= else ==================")
                         }
                     }
                 }
