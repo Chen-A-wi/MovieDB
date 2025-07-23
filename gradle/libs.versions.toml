@@ -32,6 +32,9 @@ retrofit2 = "2.11.0"
 # Test
 truth = "1.4.4"
 
+# Util
+xLog = "1.11.1"
+
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 
@@ -74,6 +77,9 @@ retrofit2 = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofi
 
 # Test
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
+
+# Util
+xlog = { module = "com.elvishew:xlog", version.ref = "xLog" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
