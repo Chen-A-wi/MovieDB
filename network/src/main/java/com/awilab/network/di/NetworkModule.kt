@@ -1,5 +1,6 @@
 package com.awilab.network.di
 
+import com.awilab.network.common.XLogInterceptor
 import com.awilab.network.service.SearchService
 import com.elvishew.xlog.XLog
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -58,19 +59,19 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
-        val loggingInterceptor = HttpLoggingInterceptor { msg ->
-            if (msg.trim().startsWith("{") || msg.trim().startsWith("[")) {
-                XLog.json(msg) // JSON format
-            } else {
-                XLog.i(msg)
-            }
+        val loggingInterceptor = HttpLoggingInterceptor { message ->
+            XLog.disableBorder()
+                .disableStackTrace()
+                .disableThreadInfo()
+                .i(message)
         }.apply {
-            level = HttpLoggingInterceptor.Level.BODY
+            level = HttpLoggingInterceptor.Level.HEADERS
         }
 
         return OkHttpClient.Builder()
             .retryOnConnectionFailure(true)
             .addNetworkInterceptor(loggingInterceptor)
+            .addInterceptor(XLogInterceptor())
             .connectTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)

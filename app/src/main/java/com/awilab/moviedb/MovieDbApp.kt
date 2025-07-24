@@ -17,6 +17,10 @@ class MovieDbApp : Application() {
     private fun initLog() {
         XLog.init(
             LogConfiguration.Builder()
+                .tag("MovieDb")
+                .enableBorder()
+                .enableThreadInfo()
+                .enableStackTrace(2)
                 .logLevel(if (BuildConfig.DEBUG) LogLevel.ALL else LogLevel.NONE)
                 .build()
         )
