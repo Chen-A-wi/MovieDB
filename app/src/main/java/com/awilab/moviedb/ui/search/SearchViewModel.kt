@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -15,5 +16,15 @@ class SearchViewModel @Inject constructor(
     private val _keyword = MutableStateFlow("")
     val keyword: StateFlow<String> = _keyword.asStateFlow()
 
+    fun updateKeyword(query: String) {
+        _keyword.update { query }
+    }
 
+    fun search() {
+        TODO("Not yet implemented")
+    }
+
+    fun clearKeyword() {
+        _keyword.update { "" }
+    }
 }

@@ -3,6 +3,7 @@ package com.awilab.moviedb.ui.search
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -15,6 +16,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.awilab.moviedb.R
 import com.awilab.moviedb.common.navigation.MovieDbDestination
 import com.awilab.moviedb.ui.widgets.AppBar
+import com.awilab.moviedb.ui.widgets.SearchFieldBar
 
 @Composable
 fun SearchPage(
@@ -24,7 +26,15 @@ fun SearchPage(
 
     Scaffold(
         topBar = {
-            AppBar(titleRes = R.string.app_name)
+            SearchFieldBar(
+                query = keyword,
+                onQueryChange = vm::updateKeyword,
+                onSearch = vm::search,
+                onClear = vm::clearKeyword,
+                hint = {
+                    Text(text = "電影名、演員等．．．")
+                }
+            )
         },
         modifier = Modifier.fillMaxSize(),
     ) { innerPadding ->
