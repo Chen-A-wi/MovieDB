@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
@@ -22,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -82,7 +84,7 @@ fun SearchFieldBar(
     onQueryChange: (String) -> Unit,
     onSearch: () -> Unit,
     onClear: () -> Unit,
-    hint: (@Composable () -> Unit) = {},
+    hintRes: Int = R.string.lab_search,
 ) {
     Box(
         modifier = modifier
@@ -98,10 +100,16 @@ fun SearchFieldBar(
             shape = MaterialTheme.shapes.extraLarge,
             value = query,
             onValueChange = onQueryChange,
-            placeholder = hint,
+            placeholder = {
+                Text(
+                    text = stringResource(hintRes),
+                    style = TextStyle(fontSize = 14.sp)
+                )
+            },
 //            label = {
 //                Text(text = stringResource(id = R.string.lab_search))
 //            },
+            // 左邊搜尋 icon
             leadingIcon = {
                 Icon(
                     Icons.Filled.Search,
@@ -109,6 +117,18 @@ fun SearchFieldBar(
                     contentDescription = stringResource(id = R.string.lab_search),
                 )
             },
+            // 右邊清除 icon
+            trailingIcon = {
+                if (query.isNotEmpty()) {
+                    IconButton(onClick = { onClear() }) {
+                        Icon(
+                            imageVector = Icons.Filled.Clear,
+                            contentDescription = stringResource(id = R.string.lab_clear)
+                        )
+                    }
+                }
+            },
+            textStyle = TextStyle(fontSize = 14.sp),
         )
     }
 }

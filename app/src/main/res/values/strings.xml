@@ -3,4 +3,5 @@
     <string name="lab_home">Home</string>
     <string name="lab_search">Search</string>
     <string name="lab_detail">Detail</string>
+    <string name="lab_clear">Clear</string>
 </resources>

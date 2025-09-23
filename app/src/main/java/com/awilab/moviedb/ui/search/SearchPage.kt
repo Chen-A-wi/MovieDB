@@ -11,6 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.awilab.moviedb.R
@@ -31,9 +33,6 @@ fun SearchPage(
                 onQueryChange = vm::updateKeyword,
                 onSearch = vm::search,
                 onClear = vm::clearKeyword,
-                hint = {
-                    Text(text = "電影名、演員等．．．")
-                }
             )
         },
         modifier = Modifier.fillMaxSize(),
