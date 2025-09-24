@@ -18,10 +18,16 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -62,7 +68,7 @@ fun AppBar(
         Text(
             modifier = Modifier,
             text = stringResource(id = titleRes),
-            color = MaterialTheme.colorScheme.onSecondaryContainer,
+            color = MaterialTheme.colorScheme.onPrimary,
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
         )
@@ -86,34 +92,37 @@ fun SearchFieldBar(
     onClear: () -> Unit,
     hintRes: Int = R.string.lab_search,
 ) {
+    var isFocused by remember { mutableStateOf(false) }
+
     Box(
         modifier = modifier
             .fillMaxWidth()
             .height(56.dp)
-            .background(color = MaterialTheme.colorScheme.primaryContainer),
+            .background(color = MaterialTheme.colorScheme.primary),
         contentAlignment = Alignment.Center,
     ) {
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 4.dp),
+                .padding(horizontal = 16.dp, vertical = 4.dp)
+                .onFocusChanged { isFocused = it.isFocused },
             shape = MaterialTheme.shapes.extraLarge,
             value = query,
             onValueChange = onQueryChange,
             placeholder = {
-                Text(
-                    text = stringResource(hintRes),
-                    style = TextStyle(fontSize = 14.sp)
-                )
+                if (!isFocused && query.isEmpty()) {
+                    Text(
+                        text = stringResource(hintRes),
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                        )
+                    )
+                }
             },
-//            label = {
-//                Text(text = stringResource(id = R.string.lab_search))
-//            },
             // 左邊搜尋 icon
             leadingIcon = {
                 Icon(
                     Icons.Filled.Search,
-                    tint = MaterialTheme.colorScheme.outline,
                     contentDescription = stringResource(id = R.string.lab_search),
                 )
             },
@@ -129,6 +138,17 @@ fun SearchFieldBar(
                 }
             },
             textStyle = TextStyle(fontSize = 14.sp),
+            colors = OutlinedTextFieldDefaults.colors(
+                cursorColor = MaterialTheme.colorScheme.onPrimary,              // 光標顏色
+                focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                unfocusedLeadingIconColor = MaterialTheme.colorScheme.outline,
+                focusedTrailingIconColor = MaterialTheme.colorScheme.onPrimary,
+                unfocusedTrailingIconColor = MaterialTheme.colorScheme.outline,
+                focusedTextColor = MaterialTheme.colorScheme.onPrimary,         // 聚焦時文字
+                unfocusedTextColor = MaterialTheme.colorScheme.onSurface,       // 未聚焦時文字
+                focusedBorderColor = MaterialTheme.colorScheme.onPrimary,       // 聚焦時邊框顏色
+                unfocusedBorderColor = MaterialTheme.colorScheme.outline,       // 未聚焦時邊框顏色
+            )
         )
     }
 }
