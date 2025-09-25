@@ -4,12 +4,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -21,15 +20,19 @@ import com.awilab.moviedb.ui.widgets.SearchFieldBar
 fun SearchPage(
     vm: SearchViewModel = hiltViewModel(),
 ) {
-    val keyword by vm.keyword.collectAsStateWithLifecycle()
+    val keyword by vm.query.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        vm.search() // 測試打API
+    }
 
     Scaffold(
         topBar = {
             SearchFieldBar(
                 query = keyword,
-                onQueryChange = vm::updateKeyword,
+                onQueryChange = vm::onQueryChanged,
                 onSearch = vm::search,
-                onClear = vm::clearKeyword,
+                onClear = vm::clearQuery,
             )
         },
         modifier = Modifier.fillMaxSize(),

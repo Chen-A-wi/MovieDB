@@ -17,10 +17,6 @@ import com.awilab.moviedb.ui.widgets.AppBar
 fun HomePage(
     vm: HomeViewModel = hiltViewModel()
 ) {
-    LaunchedEffect(Unit) {
-        vm.test()
-    }
-
     Scaffold(
         topBar = {
             AppBar(R.string.app_name)

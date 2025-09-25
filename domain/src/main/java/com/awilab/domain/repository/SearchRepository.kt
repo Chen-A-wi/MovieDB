@@ -7,5 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface SearchRepository {
     fun searchMovie(
         query: String,
+        page: Int,
+        language: String = "en",
     ): Flow<ApiResponse<SearchResults>>
 }
