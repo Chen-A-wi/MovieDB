@@ -22,16 +22,11 @@ fun SearchPage(
 ) {
     val keyword by vm.query.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
-        vm.search() // 測試打API
-    }
-
     Scaffold(
         topBar = {
             SearchFieldBar(
                 query = keyword,
                 onQueryChange = vm::onQueryChanged,
-                onSearch = vm::search,
                 onClear = vm::clearQuery,
             )
         },

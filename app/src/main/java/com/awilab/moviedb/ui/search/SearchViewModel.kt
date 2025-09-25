@@ -17,6 +17,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -53,7 +55,7 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun search() {
+    private fun search() {
         XLog.d("@@@@@@@@@@@ ${_query.value} @@@@@@@@@@")
 
 //        viewModelScope.launch {
@@ -87,5 +89,6 @@ class SearchViewModel @Inject constructor(
 
     fun clearQuery() {
         _query.update { "" }
+        _searchResultList.update { mutableListOf() }
     }
 }

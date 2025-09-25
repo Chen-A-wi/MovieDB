@@ -94,7 +94,6 @@ fun SearchFieldBar(
     modifier: Modifier = Modifier,
     query: String,
     onQueryChange: (String) -> Unit,
-    onSearch: () -> Unit,
     onClear: () -> Unit,
     hintRes: Int = R.string.lab_search,
 ) {
