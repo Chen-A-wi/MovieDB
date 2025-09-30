@@ -5,7 +5,7 @@ import com.awilab.network.model.SearchResults
 import kotlinx.coroutines.flow.Flow
 
 interface SearchRepository {
-    fun searchMovie(
+    suspend fun searchMovie(
         query: String,
         page: Int,
         language: String = "en",

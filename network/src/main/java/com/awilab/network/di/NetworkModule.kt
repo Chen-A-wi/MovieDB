@@ -19,7 +19,8 @@ import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-internal const val BASE_URL = "https://api.themoviedb.org/3/"
+const val BASE_URL = "https://api.themoviedb.org/3/"
+const val BASE_IMAGE_URL = "https://image.tmdb.org/"
 
 @InstallIn(SingletonComponent::class)
 @Module

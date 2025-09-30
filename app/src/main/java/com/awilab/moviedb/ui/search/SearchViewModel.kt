@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.awilab.common.coroutine.CommonDispatcherProvider
 import com.awilab.domain.repository.SearchRepository
 import com.awilab.moviedb.common.navigation.MovieDbNavigator
+import com.awilab.network.ApiResponse
 import com.awilab.network.model.SearchResults
 import com.elvishew.xlog.XLog
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -35,17 +37,20 @@ class SearchViewModel @Inject constructor(
     val query: StateFlow<String> = _query.asStateFlow()
 
     private val _queryFlow = MutableSharedFlow<String>(replay = 0)
-    val queryFlow = _queryFlow.asSharedFlow()
+    private val queryFlow = _queryFlow.asSharedFlow()
 
-    private val _searchResultList = MutableStateFlow<MutableList<SearchResults>>(mutableListOf())
-    val searchResultList: StateFlow<MutableList<SearchResults>> = _searchResultList.asStateFlow()
+    private val _searchResultList = MutableStateFlow<List<SearchResults.Result>>(listOf())
+    val searchResultList: StateFlow<List<SearchResults.Result>> = _searchResultList.asStateFlow()
 
     init {
         viewModelScope.launch {
             queryFlow.onEach { q -> _query.update { q } }
                 .debounce(500L)
                 .distinctUntilChanged()
-                .collectLatest { search() }
+                .collectLatest {
+                    _searchResultList.value = emptyList()   // clean list
+                    search()
+                }
         }
     }
 
@@ -56,35 +61,36 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun search() {
-        XLog.d("@@@@@@@@@@@ ${_query.value} @@@@@@@@@@")
+        viewModelScope.launch {
+            searchRepository.searchMovie(
+                query = _query.value,
+                page = 1
+            )
+                .flowOn(dispatcher.io)
+                .collect { response ->
+                    when (response) {
+                        is ApiResponse.Loading -> {
+                            XLog.d("================= isLoading ==================")
+                        }
 
-//        viewModelScope.launch {
-//            searchRepository.searchMovie(
-//                query = _keyword.value,
-//                page = 1
-//            )
-//                .flowOn(dispatcher.io)
-//                .collect { response ->
-//                    when (response) {
-//                        is ApiResponse.Loading -> {
-//                            XLog.d("================= isLoading ==================")
-//                        }
-//
-//                        is ApiResponse.Error -> {
-//                            XLog.d("================= Error: ${response.exception}")
-//                        }
-//
-//                        is ApiResponse.Success -> {
-//                            XLog.d("================= Success: ${response.data}")
-//
-//                        }
-//
-//                        else -> {
-//                            XLog.d("================= else ==================")
-//                        }
-//                    }
-//                }
-//        }
+                        is ApiResponse.Error -> {
+                            XLog.d("================= Error: ${response.exception}")
+                        }
+
+                        is ApiResponse.Success -> {
+                            response.data.results?.let {
+                                _searchResultList.update { oldList ->
+                                    oldList + it.filterNotNull()
+                                }
+                            }
+                        }
+
+                        else -> {
+                            XLog.d("================= else ==================")
+                        }
+                    }
+                }
+        }
     }
 
     fun clearQuery() {

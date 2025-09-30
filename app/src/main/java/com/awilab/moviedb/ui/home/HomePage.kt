@@ -11,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.awilab.moviedb.R
+import com.awilab.moviedb.common.navigation.MovieDbDestination
 import com.awilab.moviedb.ui.widgets.AppBar
 
 @Composable
@@ -29,7 +30,9 @@ fun HomePage(
                 .clickable {
                 },
         ) {
-            Text(text = "Hello Home Screen")
+            Text(text = "Hello Home Screen", modifier = Modifier.clickable {
+                vm.navigator.navigate(MovieDbDestination.DetailDestination.route)
+            })
         }
     }
 }
