@@ -14,7 +14,10 @@ class MovieDbNavigator @Inject constructor() {
 
     // 導航到指定路由
     fun navigate(route: String) {
-        navController.navigate(route)
+        navController.navigate(route) {
+            launchSingleTop = true
+            restoreState = true
+        }
     }
 
     // 返回上一頁

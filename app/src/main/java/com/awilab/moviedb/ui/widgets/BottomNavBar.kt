@@ -25,7 +25,7 @@ fun BottomNavBar(
         bottomNavList.forEach { item ->
             NavigationBarItem(
                 selected = navigator.getCurrentRoute() == item.route,
-                onClick = { navigator.navigateSingleTopTo(item.route) },
+                onClick = { navigator.navigate(item.route) },
                 icon = {
                     Icon(
                         imageVector = item.icon ?: Icons.Filled.Home,
