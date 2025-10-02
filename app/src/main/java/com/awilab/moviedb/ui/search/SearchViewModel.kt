@@ -3,6 +3,7 @@ package com.awilab.moviedb.ui.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.awilab.common.coroutine.CommonDispatcherProvider
+import com.awilab.common.extension.orZero
 import com.awilab.domain.repository.SearchRepository
 import com.awilab.moviedb.common.navigation.MovieDbNavigator
 import com.awilab.network.ApiResponse
@@ -42,13 +43,19 @@ class SearchViewModel @Inject constructor(
     private val _searchResultList = MutableStateFlow<List<SearchResults.Result>>(listOf())
     val searchResultList: StateFlow<List<SearchResults.Result>> = _searchResultList.asStateFlow()
 
+    private var currentPage = 1
+    private var totalPage = 0
+
     init {
         viewModelScope.launch {
             queryFlow.onEach { q -> _query.update { q } }
+                .filter { it.isNotEmpty() }
                 .debounce(500L)
                 .distinctUntilChanged()
                 .collectLatest {
-                    _searchResultList.value = emptyList()   // clean list
+                    _searchResultList.update { emptyList() }   // clean list
+                    currentPage = 1
+                    totalPage = 0
                     search()
                 }
         }
@@ -56,6 +63,7 @@ class SearchViewModel @Inject constructor(
 
     fun onQueryChanged(query: String) {
         viewModelScope.launch {
+
             _queryFlow.emit(query)
         }
     }
@@ -64,7 +72,7 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch {
             searchRepository.searchMovie(
                 query = _query.value,
-                page = 1
+                page = currentPage
             )
                 .flowOn(dispatcher.io)
                 .collect { response ->
@@ -74,27 +82,37 @@ class SearchViewModel @Inject constructor(
                         }
 
                         is ApiResponse.Error -> {
-                            XLog.d("================= Error: ${response.exception}")
+                            XLog.d("${response.exception}")
                         }
 
                         is ApiResponse.Success -> {
+                            XLog.d("current page: ${response.data.page.orZero()}")
+                            if (currentPage <= response.data.totalPages.orZero()) {
+                                currentPage += 1
+                            }
+                            totalPage = response.data.totalPages.orZero()
+
                             response.data.results?.let {
                                 _searchResultList.update { oldList ->
                                     oldList + it.filterNotNull()
                                 }
                             }
                         }
-
-                        else -> {
-                            XLog.d("================= else ==================")
-                        }
                     }
                 }
         }
     }
 
+    fun loadMore() {
+        if (currentPage <= totalPage) {
+            search()
+        }
+    }
+
     fun clearQuery() {
         _query.update { "" }
-        _searchResultList.update { mutableListOf() }
+        _searchResultList.update { listOf() }
+        currentPage = 1
+        totalPage = 0
     }
 }
