@@ -67,7 +67,11 @@ fun AppBar(
     ) {
         if (showBack) {
             IconButton(onClick = { onBack?.invoke() }) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                Icon(
+                    Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back",
+                    tint = MaterialTheme.colorScheme.onPrimary,
+                )
             }
         }
 
@@ -83,7 +87,11 @@ fun AppBar(
             Spacer(Modifier.weight(1f))
 
             IconButton(onClick = { onClose?.invoke() }) {
-                Icon(Icons.Filled.Close, contentDescription = "Back")
+                Icon(
+                    Icons.Filled.Close,
+                    contentDescription = "Back",
+                    tint = MaterialTheme.colorScheme.onPrimary,
+                )
             }
         }
     }

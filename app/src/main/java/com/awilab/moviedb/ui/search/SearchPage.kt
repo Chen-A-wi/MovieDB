@@ -16,10 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.awilab.common.extension.orZero
+import com.awilab.moviedb.common.navigation.MovieDbDestination
 import com.awilab.moviedb.ui.widgets.SearchFieldBar
-import com.elvishew.xlog.XLog
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
@@ -68,7 +66,9 @@ fun SearchPage(
                 modifier = Modifier.fillMaxSize(),
             ) {
                 items(resultList) { item ->
-                    SearchResultItem(item)
+                    SearchResultItem(item) {
+                        vm.navigator.navigate(MovieDbDestination.DetailDestination.route)
+                    }
                 }
             }
         }
