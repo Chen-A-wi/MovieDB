@@ -43,6 +43,9 @@ class SearchViewModel @Inject constructor(
     private val _searchResultList = MutableStateFlow<List<SearchResults.Result>>(listOf())
     val searchResultList: StateFlow<List<SearchResults.Result>> = _searchResultList.asStateFlow()
 
+    private val _isLoadingMore = MutableStateFlow(false)
+    val isLoadingMore: StateFlow<Boolean> = _isLoadingMore
+
     private var currentPage = 1
     private var totalPage = 0
 
@@ -53,9 +56,9 @@ class SearchViewModel @Inject constructor(
                     clearResults()
                     emit(it)
                 }
-                .filter { it.isNotEmpty() }
-                .debounce(500L)
+                .debounce(300L)
                 .distinctUntilChanged()
+                .filter { it.isNotEmpty() }
                 .collectLatest {
                     search()
                 }
@@ -68,7 +71,7 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    private fun search() {
+    private fun search(isLoadMore: Boolean = false) {
         viewModelScope.launch {
             searchRepository.searchMovie(
                 query = _query.value,
@@ -79,6 +82,9 @@ class SearchViewModel @Inject constructor(
                     when (response) {
                         is ApiResponse.Loading -> {
                             XLog.d("================= isLoading ==================")
+                            if (isLoadMore) {
+                                _isLoadingMore.update { true }
+                            }
                         }
 
                         is ApiResponse.Error -> {
@@ -86,10 +92,10 @@ class SearchViewModel @Inject constructor(
                         }
 
                         is ApiResponse.Success -> {
-                            XLog.d("current page: ${response.data.page.orZero()}")
-                            if (currentPage <= response.data.totalPages.orZero()) {
-                                currentPage += 1
+                            if (isLoadMore) {
+                                _isLoadingMore.update { false }
                             }
+
                             totalPage = response.data.totalPages.orZero()
 
                             response.data.results?.let {
@@ -105,7 +111,8 @@ class SearchViewModel @Inject constructor(
 
     fun loadMore() {
         if (currentPage <= totalPage) {
-            search()
+            search(isLoadMore = true)
+            currentPage += 1
         }
     }
 
@@ -114,7 +121,7 @@ class SearchViewModel @Inject constructor(
         clearResults()
     }
 
-    fun clearResults() {
+    private fun clearResults() {
         _searchResultList.update { emptyList() }
         currentPage = 1
         totalPage = 0
