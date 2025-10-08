@@ -14,6 +14,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":common"))
     implementation(libs.retrofit2)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging)

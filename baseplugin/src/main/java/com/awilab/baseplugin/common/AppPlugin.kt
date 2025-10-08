@@ -69,6 +69,8 @@ class AppPlugin : Plugin<Project> {
                 "ksp"(libs.hilt.compiler)
                 //endregion
 
+                "implementation"(libs.xlog)
+
                 "testImplementation"(libs.junit)
                 "androidTestImplementation"(libs.androidx.junit)
                 "androidTestImplementation"(libs.androidx.espresso.core)

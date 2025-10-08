@@ -7,6 +7,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.project
 import org.gradle.kotlin.dsl.the
 
 class BaseLibPlugin : Plugin<Project> {
@@ -46,6 +47,8 @@ class BaseLibPlugin : Plugin<Project> {
                 "implementation"(libs.hilt.android)
                 "ksp"(libs.hilt.compiler)
                 //endregion
+
+                "implementation"(libs.xlog)
 
                 "testImplementation"(libs.junit)
                 "androidTestImplementation"(libs.androidx.junit)

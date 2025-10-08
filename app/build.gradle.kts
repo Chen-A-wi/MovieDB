@@ -20,4 +20,17 @@ android {
 
 dependencies {
     implementation(project(":common"))
+    implementation(project(":network"))
+    implementation(project(":data"))
+    implementation(project(":domain"))
+
+    implementation(libs.androidx.navigation.compose)
+
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.paging.compose)
+
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network)
+
+    implementation(libs.androidx.icons)
 }

@@ -1,15 +1,15 @@
 package com.awilab.network.di
 
-import android.content.Context
+import com.awilab.network.common.XLogInterceptor
+import com.awilab.network.service.SearchService
+import com.elvishew.xlog.XLog
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import okhttp3.Cache
-import okhttp3.ConnectionPool
 import kotlinx.serialization.json.Json
+import okhttp3.ConnectionPool
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
@@ -19,18 +19,29 @@ import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-internal const val BASE_URL = "https://api.themoviedb.org/3/"
+const val BASE_URL = "https://api.themoviedb.org/3/"
+const val BASE_IMAGE_URL = "https://image.tmdb.org/"
 
 @InstallIn(SingletonComponent::class)
 @Module
 class NetworkModule {
 
+    private fun <T> Retrofit.createService(clazz: Class<T>): T {
+        return this.create(clazz)
+    }
+
     @Provides
     @Singleton
-    inline fun <reified T> provideService(
-        retrofit: Retrofit
-    ): T {
-        return retrofit.create(T::class.java)
+    fun provideJsonConverterFactory(): Converter.Factory {
+        val jsonBuilder = Json {
+            ignoreUnknownKeys = true // skip unknown json key
+            coerceInputValues = true // null default
+            prettyPrint = true // format
+            encodeDefaults = true //序列化
+            allowSpecialFloatingPointValues = true // allow special float value
+        }
+
+        return jsonBuilder.asConverterFactory("application/json".toMediaType())
     }
 
     @Provides
@@ -48,35 +59,33 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(
-        @ApplicationContext context: Context
-    ): OkHttpClient {
-        val cacheSize = (5 * 1024 * 1024).toLong()
-        val mCache = Cache(context.cacheDir, cacheSize)
-        val interceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
+    fun provideOkHttpClient(): OkHttpClient {
+        val loggingInterceptor = HttpLoggingInterceptor { message ->
+            XLog.disableBorder()
+                .disableStackTrace()
+                .disableThreadInfo()
+                .i(message)
+        }.apply {
+            level = HttpLoggingInterceptor.Level.HEADERS
         }
-        val client = OkHttpClient.Builder()
+
+        return OkHttpClient.Builder()
             .retryOnConnectionFailure(true)
+            .addNetworkInterceptor(loggingInterceptor)
+            .addInterceptor(XLogInterceptor())
             .connectTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
-            .addNetworkInterceptor(interceptor)
             .connectionPool(ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
             .protocols(listOf(Protocol.HTTP_1_1))
-
-        return client.build()
+            .build()
     }
 
     @Provides
     @Singleton
-    fun provideJsonConverterFactory(): Converter.Factory {
-        val jsonBuilder = Json {
-            ignoreUnknownKeys = true // skip unknown json key
-            coerceInputValues = true // null default
-            prettyPrint = true // format
-        }
-
-        return jsonBuilder.asConverterFactory("application/json".toMediaType())
+    fun provideSearchService(
+        retrofit: Retrofit,
+    ): SearchService {
+        return retrofit.createService(SearchService::class.java)
     }
 }
