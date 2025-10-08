@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -48,13 +49,14 @@ class SearchViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             queryFlow.onEach { q -> _query.update { q } }
+                .transform {
+                    clearResults()
+                    emit(it)
+                }
                 .filter { it.isNotEmpty() }
                 .debounce(500L)
                 .distinctUntilChanged()
                 .collectLatest {
-                    _searchResultList.update { emptyList() }   // clean list
-                    currentPage = 1
-                    totalPage = 0
                     search()
                 }
         }
@@ -62,7 +64,6 @@ class SearchViewModel @Inject constructor(
 
     fun onQueryChanged(query: String) {
         viewModelScope.launch {
-
             _queryFlow.emit(query)
         }
     }
@@ -110,7 +111,11 @@ class SearchViewModel @Inject constructor(
 
     fun clearQuery() {
         _query.update { "" }
-        _searchResultList.update { listOf() }
+        clearResults()
+    }
+
+    fun clearResults() {
+        _searchResultList.update { emptyList() }
         currentPage = 1
         totalPage = 0
     }
