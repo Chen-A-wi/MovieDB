@@ -1,6 +1,8 @@
 package com.awilab.network.di
 
+import com.awilab.network.common.XLogInterceptor
 import com.awilab.network.service.SearchService
+import com.elvishew.xlog.XLog
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -17,7 +19,8 @@ import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-internal const val BASE_URL = "https://api.themoviedb.org/3/"
+const val BASE_URL = "https://api.themoviedb.org/3/"
+const val BASE_IMAGE_URL = "https://image.tmdb.org/"
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -57,13 +60,19 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
-        val loggingInterceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
+        val loggingInterceptor = HttpLoggingInterceptor { message ->
+            XLog.disableBorder()
+                .disableStackTrace()
+                .disableThreadInfo()
+                .i(message)
+        }.apply {
+            level = HttpLoggingInterceptor.Level.HEADERS
         }
 
         return OkHttpClient.Builder()
             .retryOnConnectionFailure(true)
             .addNetworkInterceptor(loggingInterceptor)
+            .addInterceptor(XLogInterceptor())
             .connectTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)

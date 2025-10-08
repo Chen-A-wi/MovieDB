@@ -2,6 +2,7 @@ package com.awilab.moviedb.common.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import javax.inject.Inject
@@ -14,7 +15,14 @@ class MovieDbNavigator @Inject constructor() {
 
     // 導航到指定路由
     fun navigate(route: String) {
-        navController.navigate(route)
+        navController.navigate(route) {
+            launchSingleTop = true
+            restoreState = true
+            popUpTo(route) {
+                saveState = true
+                inclusive = true
+            }
+        }
     }
 
     // 返回上一頁
@@ -30,10 +38,10 @@ class MovieDbNavigator @Inject constructor() {
     }
 
     fun navigateSingleTopTo(route: String) = navController.navigate(route) {
-        popUpTo(navController.graph.startDestinationId) {
-            saveState = true
-        }
         launchSingleTop = true
         restoreState = true
+        popUpTo(navController.graph.findStartDestination().id) {
+            saveState = true
+        }
     }
 }

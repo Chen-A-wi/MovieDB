@@ -11,6 +11,10 @@ lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
 navigationCompose = "2.8.8"
 composeBom = "2025.02.00"
+paging = "3.3.6"
+
+# Coil
+coil = "3.2.0"
 
 jetbrainsKotlinJvm = "1.9.0"
 appcompat = "1.7.0"
@@ -29,8 +33,14 @@ androidxHiltNavigationCompose = "1.2.0"
 okhttp = "4.12.0"
 retrofit2 = "2.11.0"
 
+# Icons
+icons = "1.7.8"
+
 # Test
 truth = "1.4.4"
+
+# Util
+xLog = "1.11.1"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -55,8 +65,16 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 
+androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
+
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-icons = { module = "androidx.compose.material:material-icons-extended", version.ref = "icons" }
+
+# Coil
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-network = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 
 # Serialization
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
@@ -74,6 +92,9 @@ retrofit2 = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofi
 
 # Test
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
+
+# Util
+xlog = { module = "com.elvishew:xlog", version.ref = "xLog" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

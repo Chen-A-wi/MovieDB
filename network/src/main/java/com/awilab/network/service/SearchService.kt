@@ -8,8 +8,8 @@ interface SearchService {
     @GET("search/movie")
     suspend fun searchMovie(
         @Query("query") query: String,
-        @Query("page") page: Int? = 1,
-        @Query("language") language: String = "en",
+        @Query("page") page: Int,
+        @Query("language") language: String,
         @Query("api_key") apiKey: String = "30475441afb1c0a41ed69133fe8b35af",
     ): SearchResults
 }

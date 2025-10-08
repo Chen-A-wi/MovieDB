@@ -13,11 +13,17 @@ class SearchRepositoryImpl @Inject constructor(
     private val searchService: SearchService,
 ) : SearchRepository {
 
-    override fun searchMovie(
+    override suspend fun searchMovie(
         query: String,
+        page: Int,
+        language: String,
     ): Flow<ApiResponse<SearchResults>> {
         return flow {
-            searchService.searchMovie(query).also { response ->
+            searchService.searchMovie(
+                query = query,
+                page = page,
+                language = language,
+            ).also { response ->
                 emit(response)
             }
         }.asApiResponse()

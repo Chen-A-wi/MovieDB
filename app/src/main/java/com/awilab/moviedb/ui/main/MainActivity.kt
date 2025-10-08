@@ -7,10 +7,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.awilab.moviedb.common.navigation.MovieDbNavHost
@@ -37,7 +39,6 @@ class MainActivity : ComponentActivity() {
 
             MovieDBTheme {
                 Scaffold(modifier = Modifier
-                    .statusBarsPadding()
                     .fillMaxSize(),
                     bottomBar = {
                         AnimatedVisibility(
@@ -51,7 +52,9 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     MovieDbNavHost(
                         navigator = navigator,
-                        modifier = Modifier.padding(innerPadding)
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .consumeWindowInsets(innerPadding)  // 取消 NavHost 到內部會預留的 padding
                     )
                 }
             }
