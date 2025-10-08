@@ -33,6 +33,9 @@ androidxHiltNavigationCompose = "1.2.0"
 okhttp = "4.12.0"
 retrofit2 = "2.11.0"
 
+# Icons
+icons = "1.7.8"
+
 # Test
 truth = "1.4.4"
 
@@ -67,6 +70,7 @@ androidx-paging-compose = { module = "androidx.paging:paging-compose", version.r
 
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-icons = { module = "androidx.compose.material:material-icons-extended", version.ref = "icons" }
 
 # Coil
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }

@@ -13,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.awilab.common.extension.orZero
@@ -63,10 +64,12 @@ fun SearchPage(
             LazyVerticalGrid(
                 columns = GridCells.Fixed(3),
                 state = gridState,
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 4.dp, vertical = 4.dp),
             ) {
                 items(resultList) { item ->
-                    SearchResultItem(item) {
+                    SearchResultItem(itemData = item) {
                         vm.navigator.navigate(MovieDbDestination.DetailDestination.route)
                     }
                 }
