@@ -8,7 +8,10 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.the
+import java.util.Properties
+import kotlin.properties.Delegates
 
 class AppPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -24,6 +27,8 @@ class AppPlugin : Plugin<Project> {
             }
 
             extensions.configure<ApplicationExtension> {
+                flavorDimensions += listOf("default")
+
                 defaultConfig {
                     targetSdk = Version.TARGET_SDK
                     versionCode = Version.VERSION_CODE
@@ -48,6 +53,28 @@ class AppPlugin : Plugin<Project> {
 
                     debug {
 
+                    }
+                }
+
+                productFlavors {
+                    var apiKey by Delegates.notNull<String>()
+                    var apiToken by Delegates.notNull<String>()
+
+                    Properties().apply {
+                        load(project.rootProject.file("local.properties").inputStream())
+                        apiKey = getProperty("API_KEY")
+                        apiToken = getProperty("API_TOKEN")
+                    }
+
+                    create("dev") {
+                        resValue("string", "app_name", "(DEV)MovieDB")
+                        buildConfigField("String", "API_KEY", apiKey)
+                        buildConfigField("String", "API_TOKEN", apiToken)
+                    }
+                    create("prod") {
+                        resValue("string", "app_name", "MovieDB")
+                        buildConfigField("String", "API_KEY", apiKey)
+                        buildConfigField("String", "API_TOKEN", apiToken)
                     }
                 }
 
