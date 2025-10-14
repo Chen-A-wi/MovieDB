@@ -7,15 +7,15 @@ import com.awilab.moviedb.ui.detail.DetailPage
 import com.awilab.moviedb.ui.home.HomePage
 import com.awilab.moviedb.ui.search.SearchPage
 
-fun NavGraphBuilder.bottomNavGraph() {
-    composable(MovieDbDestination.HomeDestination.route) {
+fun NavGraphBuilder.homeGraph() {
+    composable(NavScreen.Home.route) {
         HomePage()
     }
 }
 
 fun NavGraphBuilder.searchGraph() {
-    navigation(startDestination = MovieDbDestination.SearchDestination.route, route = "search") {
-        composable(MovieDbDestination.SearchDestination.route) { SearchPage() }
-        composable(MovieDbDestination.DetailDestination.route) { DetailPage() }
+    navigation(startDestination = NavScreen.Search.route, route = NavGraph.Search.route) {
+        composable(NavScreen.Search.route) { SearchPage() }
+        composable(NavScreen.Detail.route) { DetailPage() }
     }
 }

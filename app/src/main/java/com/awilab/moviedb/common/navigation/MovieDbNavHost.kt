@@ -11,10 +11,10 @@ fun MovieDbNavHost(
 ) {
     NavHost(
         navController = navigator.navController,
-        startDestination = MovieDbDestination.HomeDestination.route,
+        startDestination = NavScreen.Home.route,
         modifier = modifier,
     ) {
-        bottomNavGraph()
+        homeGraph()
         searchGraph()
     }
 }
