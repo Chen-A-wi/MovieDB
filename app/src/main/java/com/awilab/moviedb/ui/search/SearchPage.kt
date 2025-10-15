@@ -25,6 +25,7 @@ import com.awilab.common.extension.orZero
 import com.awilab.data.local.search.SearchToDetailArgs
 import com.awilab.moviedb.common.navigation.MovieDbDestination
 import com.awilab.moviedb.common.navigation.NavScreen
+import com.awilab.moviedb.ui.widgets.LoadingPage
 import com.awilab.moviedb.ui.widgets.SearchFieldBar
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -36,6 +37,7 @@ fun SearchPage(
     val keyword by vm.query.collectAsStateWithLifecycle()
     val resultList by vm.searchResultList.collectAsStateWithLifecycle()
     val isLoadingMore by vm.isLoadingMore.collectAsStateWithLifecycle()
+    val isLoading by vm.isLoading.collectAsStateWithLifecycle()
     val gridState = rememberLazyGridState()
 
     LaunchedEffect(gridState) {
@@ -69,34 +71,38 @@ fun SearchPage(
                 .padding(innerPadding)
                 .fillMaxSize(),
         ) {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(3),
-                state = gridState,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 4.dp, vertical = 4.dp),
-            ) {
-                items(resultList) { item ->
-                    SearchResultItem(itemData = item) {
-                        vm.navigator.navigateWithBundle(
-                            bundleKey = NavScreen.Search.ARG_RESULT,
-                            data = SearchToDetailArgs(item.id.orZero()),
-                            route = MovieDbDestination.DetailDestination.route
-                        )
+            if (isLoading) {
+                LoadingPage()
+            } else {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(3),
+                    state = gridState,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 4.dp, vertical = 4.dp),
+                ) {
+                    items(resultList) { item ->
+                        SearchResultItem(itemData = item) {
+                            vm.navigator.navigateWithBundle(
+                                bundleKey = NavScreen.Search.ARG_RESULT,
+                                data = SearchToDetailArgs(item.id.orZero()),
+                                route = MovieDbDestination.DetailDestination.route
+                            )
+                        }
                     }
-                }
 
-                if (isLoadingMore) {
-                    item(
-                        span = { GridItemSpan(maxLineSpan) }
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 16.dp),
-                            contentAlignment = Alignment.Center
+                    if (isLoadingMore) {
+                        item(
+                            span = { GridItemSpan(maxLineSpan) }
                         ) {
-                            CircularProgressIndicator()
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 16.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator()
+                            }
                         }
                     }
                 }

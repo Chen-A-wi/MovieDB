@@ -46,6 +46,9 @@ class SearchViewModel @Inject constructor(
     private val _isLoadingMore = MutableStateFlow(false)
     val isLoadingMore: StateFlow<Boolean> = _isLoadingMore
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading:StateFlow<Boolean> = _isLoading
+
     private var currentPage = 1
     private var totalPage = 0
 
@@ -84,6 +87,8 @@ class SearchViewModel @Inject constructor(
                             XLog.d("================= isLoading ==================")
                             if (isLoadMore) {
                                 _isLoadingMore.update { true }
+                            } else {
+                                _isLoading.update { true }
                             }
                         }
 
@@ -94,6 +99,8 @@ class SearchViewModel @Inject constructor(
                         is ApiResponse.Success -> {
                             if (isLoadMore) {
                                 _isLoadingMore.update { false }
+                            } else {
+                                _isLoading.update { false }
                             }
 
                             totalPage = response.data.totalPages.orZero()
