@@ -26,6 +26,7 @@ import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
 import com.awilab.moviedb.R
 import com.awilab.moviedb.common.compose.debounceClickable
+import com.awilab.moviedb.ui.widgets.LoadingItem
 import com.awilab.network.di.BASE_IMAGE_URL
 import com.awilab.network.model.SearchResults
 
@@ -53,12 +54,7 @@ fun SearchResultItem(
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillHeight,
             loading = {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
+                LoadingItem()
             },
             error = {
                 Box(

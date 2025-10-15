@@ -84,7 +84,6 @@ class SearchViewModel @Inject constructor(
                 .collect { response ->
                     when (response) {
                         is ApiResponse.Loading -> {
-                            XLog.d("================= isLoading ==================")
                             if (isLoadMore) {
                                 _isLoadingMore.update { true }
                             } else {

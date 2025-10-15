@@ -25,3 +25,17 @@ fun LoadingPage() {
         )
     }
 }
+
+@Composable
+fun LoadingItem() {
+    val circularLoading by rememberLottieComposition(
+        spec = LottieCompositionSpec.RawRes(R.raw.double_circular_loading)
+    )
+
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        LottieAnimation(
+            composition = circularLoading,
+            iterations = LottieConstants.IterateForever,
+        )
+    }
+}
