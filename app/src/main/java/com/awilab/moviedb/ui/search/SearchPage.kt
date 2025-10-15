@@ -72,7 +72,9 @@ fun SearchPage(
                 .padding(innerPadding)
                 .fillMaxSize(),
         ) {
-            if (isLoading) {
+            if (keyword.isEmpty()) {
+                SearchDefaultPage()
+            } else if (isLoading) {
                 LoadingPage()
             } else {
                 LazyVerticalGrid(
