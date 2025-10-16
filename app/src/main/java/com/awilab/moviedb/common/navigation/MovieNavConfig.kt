@@ -5,16 +5,16 @@ sealed interface NavRoute {
 }
 
 sealed class NavGraph(override val route: String) : NavRoute {
-    object Home : NavGraph("home_graph")
-    object Search : NavGraph("search_graph")
+    data object Home : NavGraph("home_graph")
+    data object Search : NavGraph("search_graph")
 }
 
 sealed class NavScreen(override val route: String) : NavRoute {
-    object Home : NavScreen("home")
+    data object Home : NavScreen("home")
 
-    object Search : NavScreen("search") {
+    data object Search : NavScreen("search") {
         const val ARG_RESULT = "arg_result"
     }
 
-    object Detail : NavScreen("detail")
+    data object Detail : NavScreen("detail")
 }

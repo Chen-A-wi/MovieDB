@@ -12,7 +12,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.awilab.moviedb.R
 import com.awilab.moviedb.ui.widgets.AppBar
 
@@ -20,11 +19,11 @@ import com.awilab.moviedb.ui.widgets.AppBar
 fun DetailPage(
     vm: DetailViewModel = hiltViewModel(),
 ) {
-    LaunchedEffect(Unit) {
-        vm.initArgs()
-    }
-
     val movieId by vm.movieId.collectAsState()
+
+    LaunchedEffect(Unit) {
+        vm.initMovieDetail()
+    }
 
     Scaffold(
         topBar = {
