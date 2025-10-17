@@ -43,7 +43,8 @@ import com.awilab.moviedb.R
 
 @Composable
 fun AppBar(
-    @StringRes titleRes: Int,
+    @StringRes titleRes: Int = R.string.lab_empty,
+    titleString: String? = null,
     showBack: Boolean = false,
     showClose: Boolean = false,
     onBack: (() -> Unit)? = null,
@@ -77,7 +78,7 @@ fun AppBar(
 
         Text(
             modifier = Modifier,
-            text = stringResource(id = titleRes),
+            text = titleString ?: stringResource(id = titleRes),
             color = MaterialTheme.colorScheme.onPrimary,
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,

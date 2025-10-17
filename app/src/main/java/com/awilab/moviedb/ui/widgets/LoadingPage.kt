@@ -13,12 +13,12 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.awilab.moviedb.R
 
 @Composable
-fun LoadingPage() {
+fun LoadingPage(modifier: Modifier = Modifier) {
     val catLoading by rememberLottieComposition(
         spec = LottieCompositionSpec.RawRes(R.raw.cat_loading)
     )
 
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         LottieAnimation(
             composition = catLoading,
             iterations = LottieConstants.IterateForever,

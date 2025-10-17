@@ -8,6 +8,7 @@ import com.awilab.domain.repository.DetailRepository
 import com.awilab.moviedb.common.navigation.MovieDbNavigator
 import com.awilab.moviedb.common.navigation.NavScreen
 import com.awilab.network.ApiResponse
+import com.awilab.network.model.MovieDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,6 +30,10 @@ class DetailViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     val isLoading:StateFlow<Boolean> = _isLoading
 
+    private val _movieInfo = MutableStateFlow(MovieDetail())
+    val movieInfo:StateFlow<MovieDetail> = _movieInfo.asStateFlow()
+
+
     fun initMovieDetail() {
         navigator.getNavBundle<SearchToDetailArgs>(NavScreen.Search.ARG_RESULT)?.run {
             getMovieDetail(this.movieId)
@@ -49,6 +54,7 @@ class DetailViewModel @Inject constructor(
                         }
                         is ApiResponse.Success -> {
                             _isLoading.update { false }
+                            _movieInfo.update { response.data }
                         }
                         is ApiResponse.Error -> {
                             _isLoading.update { false }

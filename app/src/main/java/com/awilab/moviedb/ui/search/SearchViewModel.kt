@@ -14,7 +14,6 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
@@ -37,8 +36,7 @@ class SearchViewModel @Inject constructor(
     private val _query = MutableStateFlow("")
     val query: StateFlow<String> = _query.asStateFlow()
 
-    private val _queryFlow = MutableSharedFlow<String>(replay = 0)
-    private val queryFlow = _queryFlow.asSharedFlow()
+    private val queryFlow = MutableSharedFlow<String>(replay = 0)
 
     private val _searchResultList = MutableStateFlow<List<SearchResults.Result>>(listOf())
     val searchResultList: StateFlow<List<SearchResults.Result>> = _searchResultList.asStateFlow()
@@ -70,7 +68,7 @@ class SearchViewModel @Inject constructor(
 
     fun onQueryChanged(query: String) {
         viewModelScope.launch {
-            _queryFlow.emit(query)
+            queryFlow.emit(query)
         }
     }
 
@@ -119,13 +117,18 @@ class SearchViewModel @Inject constructor(
 
     fun loadMore() {
         if (currentPage <= totalPage) {
-            search(isLoadMore = true)
             currentPage += 1
+            search(isLoadMore = true)
         }
     }
 
     fun clearQuery() {
-        _query.update { "" }
+        _query.value = ""
+
+        viewModelScope.launch {
+            queryFlow.emit("")
+        }
+
         clearResults()
     }
 
