@@ -1,5 +1,6 @@
 package com.awilab.moviedb.ui.detail
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,11 +14,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BrokenImage
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -31,17 +34,22 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.compose.AsyncImage
 import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
 import com.awilab.moviedb.R
 import com.awilab.moviedb.ui.widgets.AppBar
+import com.awilab.moviedb.ui.widgets.LoadingItem
 import com.awilab.moviedb.ui.widgets.LoadingPage
 import com.awilab.network.di.BASE_IMAGE_URL
 import com.awilab.network.model.MovieDetail
+import com.elvishew.xlog.XLog
 
 @Composable
 fun DetailPage(
@@ -76,7 +84,7 @@ fun DetailPage(
                 LoadingPage()
             } else {
                 Column(
-//                    modifier = Modifier.verticalScroll(scrollState),
+                    modifier = Modifier.verticalScroll(scrollState),
                 ) {
                     DetailHeader(movieInfo)
 
@@ -93,11 +101,26 @@ fun GradientBlurBanner(
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         // 1. 底層：原圖
-        AsyncImage(
+        SubcomposeAsyncImage(
             model = imgUrl,
             contentDescription = null,
             modifier = Modifier.matchParentSize(),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
+            loading = {
+                LoadingItem()
+            },
+            error = {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = MaterialTheme.colorScheme.onPrimary)
+                )
+            },
+            success = {
+                SubcomposeAsyncImageContent(
+                    modifier = Modifier.matchParentSize(),
+                )
+            }
         )
 
         // 2. 上層：模糊圖 + 漸層 Alpha 遮罩
@@ -130,6 +153,10 @@ fun DetailHeader(movieInfo: MovieDetail) {
     val imgUrl = "${BASE_IMAGE_URL}t/p/w500/${movieInfo.posterPath}"
     val backgroundUrl = "${BASE_IMAGE_URL}t/p/original/${movieInfo.backdropPath}"
 
+    XLog.d(imgUrl)
+
+    XLog.d(movieInfo)
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -154,7 +181,9 @@ fun DetailHeader(movieInfo: MovieDetail) {
                 model = imgUrl,
                 contentDescription = null,
                 contentScale = ContentScale.FillHeight,
-                loading = {},
+                loading = {
+                    LoadingItem()
+                },
                 error = {
                     Box(
                         modifier = Modifier
@@ -177,15 +206,58 @@ fun DetailHeader(movieInfo: MovieDetail) {
 }
 
 @Composable
-fun MovieInfo(movieInfo: MovieDetail) {
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-        Column {
-            Text("User Score")
+fun MovieInfo(movieDetail: MovieDetail) {
+    Text(
+        text = movieDetail.title.orEmpty(),
+        modifier = Modifier
+            .padding(horizontal = 16.dp, vertical = 4.dp)
+            .fillMaxWidth(),
+        textAlign = TextAlign.Center,
+        style = TextStyle(
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold
+        )
+    )
+
+    Column {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(movieDetail.releaseDate.orEmpty())
+            if (movieDetail.originCountry?.isNotEmpty() == true){
+                Text("．")
+                Text(text = movieDetail.originCountry?.first().orEmpty())
+            }
         }
 
-        Column {
-            Text(movieInfo.title.orEmpty())
-            Text(movieInfo.releaseDate.orEmpty())
-        }
+        Text(
+            "Overview",
+            modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp)
+        )
+        Text(
+            movieDetail.overview.orEmpty(),
+            modifier = Modifier
+                .padding(vertical = 4.dp, horizontal = 16.dp)
+                .fillMaxWidth(),
+            textAlign = TextAlign.Justify
+        )
+        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
     }
 }

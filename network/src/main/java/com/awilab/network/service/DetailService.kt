@@ -12,5 +12,8 @@ interface DetailService {
         @Path("movie_id") movieId: String,
         @Query("language") language: String,
         @Query("api_key") apiKey: String = BuildConfig.API_KEY,
+//        @Query("append_to_response") appendToResponse: String = "credits,images,videos"
+        @Query("append_to_response") appendToResponse: String = "credits,videos"
+        // TODO: fix images api fail
     ): MovieDetail
 }
