@@ -1,6 +1,7 @@
 package com.awilab.moviedb.ui.detail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -88,7 +89,15 @@ fun DetailPage(
                 ) {
                     DetailHeader(movieInfo)
 
-                    MovieInfo(movieInfo)
+                    movieInfo.apply {
+                        MovieInfo(
+                            title = title.orEmpty(),
+                            overview = overview.orEmpty(),
+                            releaseDate = releaseDate.orEmpty(),
+                            originCountry = originCountry?.takeIf { it.isNotEmpty() }?.first()
+                        )
+                    }
+
                 }
             }
         }
@@ -123,7 +132,7 @@ fun GradientBlurBanner(
             }
         )
 
-        // 2. 上層：模糊圖 + 漸層 Alpha 遮罩
+        // 2. 上層：漸層 Alpha 遮罩
         Box(
             modifier = Modifier
                 .matchParentSize()
@@ -153,10 +162,6 @@ fun DetailHeader(movieInfo: MovieDetail) {
     val imgUrl = "${BASE_IMAGE_URL}t/p/w500/${movieInfo.posterPath}"
     val backgroundUrl = "${BASE_IMAGE_URL}t/p/original/${movieInfo.backdropPath}"
 
-    XLog.d(imgUrl)
-
-    XLog.d(movieInfo)
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -169,7 +174,6 @@ fun DetailHeader(movieInfo: MovieDetail) {
 
         Card(
             modifier = Modifier
-//                .align(Alignment.CenterStart)
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .aspectRatio(2f / 3f)
                 .fillMaxHeight()
@@ -206,9 +210,14 @@ fun DetailHeader(movieInfo: MovieDetail) {
 }
 
 @Composable
-fun MovieInfo(movieDetail: MovieDetail) {
+fun MovieInfo(
+    title: String,
+    overview: String,
+    releaseDate: String,
+    originCountry: String? = ""
+) {
     Text(
-        text = movieDetail.title.orEmpty(),
+        text = title,
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .fillMaxWidth(),
@@ -222,12 +231,27 @@ fun MovieInfo(movieDetail: MovieDetail) {
     Column {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(movieDetail.releaseDate.orEmpty())
-            if (movieDetail.originCountry?.isNotEmpty() == true){
+            Text(releaseDate)
+            if (originCountry?.isNotEmpty() == true) {
                 Text("．")
-                Text(text = movieDetail.originCountry?.first().orEmpty())
+                Text(
+                    text = originCountry,
+                    modifier = Modifier
+                        .border(
+                            width = 2.dp,
+                            color = Color.DarkGray,
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .padding(horizontal = 8.dp, vertical = 4.dp),
+                    color = Color.DarkGray,
+                    fontSize = 14.sp,
+                    style = TextStyle(
+                        fontWeight = FontWeight.Bold
+                    )
+                )
             }
         }
 
@@ -236,28 +260,28 @@ fun MovieInfo(movieDetail: MovieDetail) {
             modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp)
         )
         Text(
-            movieDetail.overview.orEmpty(),
+            overview,
             modifier = Modifier
                 .padding(vertical = 4.dp, horizontal = 16.dp)
                 .fillMaxWidth(),
             textAlign = TextAlign.Justify
         )
-        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(movieDetail.releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
+        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
     }
 }
