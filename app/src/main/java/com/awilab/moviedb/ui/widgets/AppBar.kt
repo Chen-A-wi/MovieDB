@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -40,6 +41,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.awilab.moviedb.R
+import com.awilab.moviedb.common.compose.debounceClickable
 
 @Composable
 fun AppBar(
@@ -59,7 +61,7 @@ fun AppBar(
             )
             .padding(
                 horizontal = if (showBack) {
-                    4.dp
+                    16.dp
                 } else {
                     24.dp
                 }
@@ -67,7 +69,12 @@ fun AppBar(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (showBack) {
-            IconButton(onClick = { onBack?.invoke() }) {
+            Box(
+                modifier = Modifier.debounceClickable {
+                    onBack?.invoke()
+                },
+                contentAlignment = Alignment.Center
+            ) {
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Back",
@@ -75,6 +82,8 @@ fun AppBar(
                 )
             }
         }
+
+        Spacer(Modifier.width(8.dp))
 
         Text(
             modifier = Modifier,
@@ -87,10 +96,15 @@ fun AppBar(
         if (showClose) {
             Spacer(Modifier.weight(1f))
 
-            IconButton(onClick = { onClose?.invoke() }) {
+            Box(
+                modifier = Modifier.debounceClickable {
+                    onClose?.invoke()
+                },
+                contentAlignment = Alignment.Center
+            ) {
                 Icon(
                     Icons.Filled.Close,
-                    contentDescription = "Back",
+                    contentDescription = "Close",
                     tint = MaterialTheme.colorScheme.onPrimary,
                 )
             }
