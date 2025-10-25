@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -13,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -45,6 +48,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
 import com.awilab.moviedb.R
+import com.awilab.moviedb.ui.widgets.ActorItemView
 import com.awilab.moviedb.ui.widgets.AppBar
 import com.awilab.moviedb.ui.widgets.LoadingItem
 import com.awilab.moviedb.ui.widgets.LoadingPage
@@ -94,10 +98,17 @@ fun DetailPage(
                             title = title.orEmpty(),
                             overview = overview.orEmpty(),
                             releaseDate = releaseDate.orEmpty(),
-                            originCountry = originCountry?.takeIf { it.isNotEmpty() }?.first()
+                            originCountry = originCountry
                         )
-                    }
 
+                        credits?.cast?.let { casts ->
+                            LazyRow {
+                                items(casts) { castInfo ->
+                                    ActorItemView(castInfo)
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -159,8 +170,11 @@ fun GradientBlurBanner(
 
 @Composable
 fun DetailHeader(movieInfo: MovieDetail) {
-    val imgUrl = "${BASE_IMAGE_URL}t/p/w500/${movieInfo.posterPath}"
-    val backgroundUrl = "${BASE_IMAGE_URL}t/p/original/${movieInfo.backdropPath}"
+    val imgUrl = "${BASE_IMAGE_URL}t/p/w500${movieInfo.posterPath}"
+    val backgroundUrl = "${BASE_IMAGE_URL}t/p/original${movieInfo.backdropPath}"
+
+    XLog.d(imgUrl)
+    XLog.d(backgroundUrl)
 
     Box(
         modifier = Modifier
@@ -214,7 +228,7 @@ fun MovieInfo(
     title: String,
     overview: String,
     releaseDate: String,
-    originCountry: String? = ""
+    originCountry: List<String?>? = emptyList()
 ) {
     Text(
         text = title,
@@ -235,23 +249,28 @@ fun MovieInfo(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(releaseDate)
-            if (originCountry?.isNotEmpty() == true) {
-                Text("．")
-                Text(
-                    text = originCountry,
-                    modifier = Modifier
-                        .border(
-                            width = 2.dp,
+
+            if (!originCountry.isNullOrEmpty()) {
+                FlowRow {
+                    originCountry.forEach { country ->
+                        Text("．")
+                        Text(
+                            text = country.orEmpty(),
+                            modifier = Modifier
+                                .border(
+                                    width = 2.dp,
+                                    color = Color.DarkGray,
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+                                .padding(horizontal = 8.dp, vertical = 4.dp),
                             color = Color.DarkGray,
-                            shape = RoundedCornerShape(8.dp)
+                            fontSize = 14.sp,
+                            style = TextStyle(
+                                fontWeight = FontWeight.Bold
+                            )
                         )
-                        .padding(horizontal = 8.dp, vertical = 4.dp),
-                    color = Color.DarkGray,
-                    fontSize = 14.sp,
-                    style = TextStyle(
-                        fontWeight = FontWeight.Bold
-                    )
-                )
+                    }
+                }
             }
         }
 
@@ -266,22 +285,5 @@ fun MovieInfo(
                 .fillMaxWidth(),
             textAlign = TextAlign.Justify
         )
-        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
-        Text(releaseDate.orEmpty(), modifier = Modifier.padding(vertical = 8.dp))
     }
 }
