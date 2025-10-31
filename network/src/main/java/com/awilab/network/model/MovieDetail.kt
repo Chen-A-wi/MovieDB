@@ -147,7 +147,6 @@ data class MovieDetail(
         val name: String? = ""
     )
 
-    // TODO: fix images api fail
     @Serializable
     data class Images(
         @SerialName("backdrops")
