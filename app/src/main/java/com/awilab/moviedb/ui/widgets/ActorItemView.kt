@@ -39,7 +39,8 @@ fun ActorItemView(
     Card(
         modifier = Modifier
             .width(140.dp)
-            .height(200.dp),
+            .height(200.dp)
+            .padding(horizontal = 8.dp),
         shape = RoundedCornerShape(10.dp),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 10.dp

@@ -101,8 +101,15 @@ fun DetailPage(
                             originCountry = originCountry
                         )
 
+                        Text(
+                            "Cast",
+                            modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp)
+                        )
+
                         credits?.cast?.let { casts ->
-                            LazyRow {
+                            LazyRow(
+                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                            ) {
                                 items(casts) { castInfo ->
                                     ActorItemView(castInfo)
                                 }
