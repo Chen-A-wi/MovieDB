@@ -101,20 +101,7 @@ fun DetailPage(
                             originCountry = originCountry
                         )
 
-                        Text(
-                            "Cast",
-                            modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp)
-                        )
-
-                        credits?.cast?.let { casts ->
-                            LazyRow(
-                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                            ) {
-                                items(casts) { castInfo ->
-                                    ActorItemView(castInfo)
-                                }
-                            }
-                        }
+                        CastLayout()
                     }
                 }
             }
@@ -292,5 +279,27 @@ fun MovieInfo(
                 .fillMaxWidth(),
             textAlign = TextAlign.Justify
         )
+    }
+}
+
+@Composable
+fun CastLayout(
+    vm: DetailViewModel = hiltViewModel()
+) {
+    val movieInfo by vm.movieInfo.collectAsStateWithLifecycle()
+
+    Text(
+        "Cast",
+        modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp)
+    )
+
+    movieInfo.credits?.cast?.let { casts ->
+        LazyRow(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        ) {
+            items(casts) { castInfo ->
+                ActorItemView(castInfo)
+            }
+        }
     }
 }
