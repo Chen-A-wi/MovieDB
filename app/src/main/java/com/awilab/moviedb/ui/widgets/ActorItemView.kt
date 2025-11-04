@@ -1,6 +1,7 @@
 package com.awilab.moviedb.ui.widgets
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -23,8 +24,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
 import com.awilab.network.di.BASE_IMAGE_URL
@@ -38,8 +43,8 @@ fun ActorItemView(
 
     Card(
         modifier = Modifier
-            .width(140.dp)
-            .height(200.dp)
+            .width(180.dp)
+            .height(260.dp)
             .padding(horizontal = 8.dp),
         shape = RoundedCornerShape(10.dp),
         elevation = CardDefaults.cardElevation(
@@ -52,7 +57,7 @@ fun ActorItemView(
         Column(modifier = Modifier.fillMaxSize()) {
             SubcomposeAsyncImage(
                 modifier = Modifier
-                    .weight(2f)
+                    .weight(0.6f)
                     .fillMaxWidth(),
                 model = actorUrl,
                 contentDescription = null,
@@ -81,16 +86,43 @@ fun ActorItemView(
 
             Box(
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(0.4f)
                     .fillMaxHeight()
                     .background(color = Color.White),
-                contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = castInfo?.name.orEmpty(),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 4.dp)
-                )
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(
+                        text = castInfo?.name.orEmpty(),
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier
+                            .padding(start = 8.dp, end = 8.dp, top = 16.dp, bottom = 8.dp)
+                            .fillMaxWidth(),
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            color = Color.Black,
+                            fontWeight = FontWeight(700)
+                        ),
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+                    Text(
+                        text = castInfo?.character.orEmpty(),
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier
+                            .padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
+                            .fillMaxWidth(),
+                        style = TextStyle(
+                            color = Color.LightGray,
+                            fontSize = 12.sp
+                        ),
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             }
         }
     }
