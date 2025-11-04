@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -38,10 +39,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
+import com.awilab.moviedb.R
 import com.awilab.moviedb.ui.widgets.ActorItemView
 import com.awilab.moviedb.ui.widgets.GradientBlurBanner
 import com.awilab.moviedb.ui.widgets.LoadingItem
 import com.awilab.network.di.BASE_IMAGE_URL
+import com.elvishew.xlog.XLog
 
 @Composable
 fun DetailHeader(
@@ -149,20 +152,38 @@ fun MovieInfo(
             }
         }
 
-        movieInfo.overview?.let { overview ->
+        Text(
+            stringResource(R.string.lab_overview),
+            style = TextStyle(
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp
+            ),
+            modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp)
+        )
+
+        if (movieInfo.overview.isNullOrBlank()) {
+            NoResults()
+        } else {
             Text(
-                "Overview",
-                modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp)
-            )
-            Text(
-                overview,
+                movieInfo.overview.orEmpty(),
                 modifier = Modifier
                     .padding(vertical = 4.dp, horizontal = 16.dp)
                     .fillMaxWidth(),
                 textAlign = TextAlign.Justify
             )
         }
+    }
+}
 
+@Composable
+fun NoResults() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(80.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(stringResource(R.string.lab_no_result))
     }
 }
 
@@ -173,15 +194,21 @@ fun CastLayout(
     val movieInfo by vm.movieInfo.collectAsStateWithLifecycle()
 
     Text(
-        "Cast",
+        stringResource(R.string.lab_cast),
+        style = TextStyle(
+            fontWeight = FontWeight.Bold,
+            fontSize = 18.sp
+        ),
         modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp)
     )
 
-    movieInfo.credits?.cast?.let { casts ->
+    if (movieInfo.credits?.cast.isNullOrEmpty()) {
+        NoResults()
+    } else {
         LazyRow(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            items(casts) { castInfo ->
+            items(movieInfo.credits?.cast.orEmpty()) { castInfo ->
                 ActorItemView(castInfo)
             }
         }

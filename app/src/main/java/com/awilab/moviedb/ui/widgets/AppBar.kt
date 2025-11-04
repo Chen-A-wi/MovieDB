@@ -55,7 +55,7 @@ fun AppBar(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp)
+            .height(60.dp)
             .background(
                 color = MaterialTheme.colorScheme.primary
             )
@@ -126,7 +126,7 @@ fun SearchFieldBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(56.dp)
+            .height(60.dp)
             .background(color = MaterialTheme.colorScheme.primary),
         contentAlignment = Alignment.Center,
     ) {
