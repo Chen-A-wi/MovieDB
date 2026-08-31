@@ -1,0 +1,5 @@
+name: Build APK & AAB
+
+env:
+  main_project_module: app
+  playstore_name: MovieDB
