@@ -1,6 +1,7 @@
 package com.awilab.network.di
 
 import com.awilab.network.common.XLogInterceptor
+import com.awilab.network.service.DetailService
 import com.awilab.network.service.SearchService
 import com.elvishew.xlog.XLog
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -87,5 +88,13 @@ class NetworkModule {
         retrofit: Retrofit,
     ): SearchService {
         return retrofit.createService(SearchService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDetailService(
+        retrofit: Retrofit,
+    ): DetailService {
+        return retrofit.createService(DetailService::class.java)
     }
 }

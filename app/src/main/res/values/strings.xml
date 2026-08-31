@@ -4,4 +4,8 @@
     <string name="lab_search">Search</string>
     <string name="lab_detail">Detail</string>
     <string name="lab_clear">Clear</string>
+    <string name="lab_empty"> </string>
+    <string name="lab_no_result">No Results.</string>
+    <string name="lab_cast">Cast</string>
+    <string name="lab_overview">Overview</string>
 </resources>

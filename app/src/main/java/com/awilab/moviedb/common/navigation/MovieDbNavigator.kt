@@ -25,6 +25,17 @@ class MovieDbNavigator @Inject constructor() {
         }
     }
 
+    fun <T> navigateWithBundle(bundleKey: String, data: T?, route: String) {
+        navController.run {
+            currentBackStackEntry?.savedStateHandle?.set(bundleKey, data)
+            navigate(route)
+        }
+    }
+
+    fun <T> getNavBundle(bundleKey: String): T? {
+        return navController.previousBackStackEntry?.savedStateHandle?.get(bundleKey)
+    }
+
     // 返回上一頁
     fun goBack() {
         navController.popBackStack()

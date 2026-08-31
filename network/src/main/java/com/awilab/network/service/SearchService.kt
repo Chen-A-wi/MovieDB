@@ -1,5 +1,6 @@
 package com.awilab.network.service
 
+import com.awilab.network.BuildConfig
 import com.awilab.network.model.SearchResults
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -10,6 +11,6 @@ interface SearchService {
         @Query("query") query: String,
         @Query("page") page: Int,
         @Query("language") language: String,
-        @Query("api_key") apiKey: String = "30475441afb1c0a41ed69133fe8b35af",
+        @Query("api_key") apiKey: String = BuildConfig.API_KEY,
     ): SearchResults
 }

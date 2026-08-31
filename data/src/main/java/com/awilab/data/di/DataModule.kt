@@ -1,7 +1,9 @@
 package com.awilab.data.di
 
+import com.awilab.data.repository.detail.DetailRepositoryImpl
 import com.awilab.domain.repository.SearchRepository
 import com.awilab.data.repository.search.SearchRepositoryImpl
+import com.awilab.domain.repository.DetailRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,5 +17,10 @@ interface DataModule {
     fun bindSearchRepository(
         searchRepositoryImpl: SearchRepositoryImpl
     ): SearchRepository
+
+    @Binds
+    fun bindMovieDetailRepository(
+        detailRepositoryImpl: DetailRepositoryImpl
+    ): DetailRepository
 
 }
