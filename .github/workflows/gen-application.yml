@@ -6,7 +6,7 @@ env:
 
 on:
   push:
-    branches: [main, github-action]
+    branches: [main, feature/github-action]
   workflow_dispatch:
 
 jobs:
