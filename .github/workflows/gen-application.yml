@@ -5,12 +5,9 @@ env:
   play store_name: MovieDB
 
 on:
-
   push:
-    branches:
-      -'master/**'
-
-    workflow_dispatch:
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
   build:
