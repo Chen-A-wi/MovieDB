@@ -32,6 +32,11 @@ jobs:
       - name: Change wrapper permissions
         run: chmod +x ./gradlew
 
+      - name: Create local.properties
+        run: |
+          echo "API_KEY=\"${{ secrets.TMDB_API_KEY }}\"" >> local.properties
+          echo "API_TOKEN=\"${{ secrets.TMDB_API_TOKEN }}\"" >> local.properties
+
       - name: Run gradle tests
         run: ./gradlew test
 
