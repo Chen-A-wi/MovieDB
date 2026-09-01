@@ -5,18 +5,32 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.navigation3.runtime.NavKey
 import com.awilab.moviedb.R
 
-data class BottomNavItem(
-    val route: NavKey,
-    val icon: ImageVector,
+val bottomNavPages = listOf(
+    MovieDbDestination.HomeDestination,
+    MovieDbDestination.SearchDestination
+)
+
+sealed class MovieDbDestination(
+    val icon: ImageVector? = null,
     @StringRes val title: Int,
-)
+    val route: String,
+) {
+    data object HomeDestination : MovieDbDestination(
+        icon = Icons.Filled.Home,
+        title = R.string.lab_home,
+        route = NavScreen.Home.route
+    )
 
-val bottomNavItems = listOf(
-    BottomNavItem(route = HomeRoute, icon = Icons.Filled.Home, title = R.string.lab_home),
-    BottomNavItem(route = SearchRoute, icon = Icons.Filled.Search, title = R.string.lab_search),
-)
+    data object SearchDestination : MovieDbDestination(
+        icon = Icons.Filled.Search,
+        title = R.string.lab_search,
+        route = NavScreen.Search.route,
+    )
 
-val topLevelRoutes: Set<NavKey> = bottomNavItems.map { it.route }.toSet()
+    data object DetailDestination : MovieDbDestination(
+        title = R.string.lab_detail,
+        route = NavScreen.Detail.route,
+    )
+}
