@@ -20,7 +20,7 @@ sealed class MovieDbDestination(
     data object HomeDestination : MovieDbDestination(
         icon = Icons.Filled.Home,
         title = R.string.lab_home,
-        route = NavScreen.Home.route,
+        route = NavScreen.Home.route
     )
 
     data object SearchDestination : MovieDbDestination(
