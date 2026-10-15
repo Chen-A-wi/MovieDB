@@ -31,14 +31,11 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
 import com.awilab.domain.model.Cast
-import com.awilab.network.di.BASE_IMAGE_URL
 
 @Composable
 fun ActorItemView(
     castInfo: Cast,
 ) {
-    val actorUrl = castInfo.profilePath?.let { "${BASE_IMAGE_URL}t/p/w500$it" }
-
     Card(
         modifier = Modifier
             .width(180.dp)
@@ -57,7 +54,7 @@ fun ActorItemView(
                 modifier = Modifier
                     .weight(0.6f)
                     .fillMaxWidth(),
-                model = actorUrl,
+                model = castInfo.profileUrl,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 alignment = Alignment.Center,
