@@ -22,7 +22,6 @@ import coil3.compose.SubcomposeAsyncImageContent
 import com.awilab.domain.model.Movie
 import com.awilab.moviedb.common.compose.debounceClickable
 import com.awilab.moviedb.ui.widgets.LoadingItem
-import com.awilab.network.di.BASE_IMAGE_URL
 
 @Composable
 fun SearchResultItem(
@@ -30,8 +29,6 @@ fun SearchResultItem(
     itemData: Movie,
     onClick: () -> Unit,
 ) {
-    val imgUrl = itemData.posterPath?.let { "${BASE_IMAGE_URL}t/p/w500$it" }
-
     Card(
         modifier
             .padding(4.dp)
@@ -43,7 +40,7 @@ fun SearchResultItem(
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         SubcomposeAsyncImage(
-            model = imgUrl,
+            model = itemData.posterUrl,
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillHeight,

@@ -43,7 +43,6 @@ import com.awilab.moviedb.R
 import com.awilab.moviedb.ui.widgets.ActorItemView
 import com.awilab.moviedb.ui.widgets.GradientBlurBanner
 import com.awilab.moviedb.ui.widgets.LoadingItem
-import com.awilab.network.di.BASE_IMAGE_URL
 import com.elvishew.xlog.XLog
 
 @Composable
@@ -52,9 +51,6 @@ fun DetailHeader(
 ) {
     val movieInfo by vm.movieInfo.collectAsStateWithLifecycle()
 
-    val imgUrl = movieInfo.posterPath?.let { "${BASE_IMAGE_URL}t/p/w500$it" }
-    val backgroundUrl = movieInfo.backdropPath?.let { "${BASE_IMAGE_URL}t/p/original$it" }
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -62,7 +58,7 @@ fun DetailHeader(
     ) {
 
         GradientBlurBanner(
-            imgUrl = backgroundUrl,
+            imgUrl = movieInfo.backdropUrl,
         )
 
         Card(
@@ -75,7 +71,7 @@ fun DetailHeader(
             elevation = CardDefaults.cardElevation(4.dp)
         ) {
             SubcomposeAsyncImage(
-                model = imgUrl,
+                model = movieInfo.posterUrl,
                 contentDescription = null,
                 contentScale = ContentScale.FillHeight,
                 loading = {

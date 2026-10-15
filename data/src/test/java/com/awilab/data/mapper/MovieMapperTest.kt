@@ -29,7 +29,7 @@ class MovieMapperTest {
         assertEquals(2, page.page)
         assertEquals(5, page.totalPages)
         assertEquals(
-            listOf(Movie(1, "A", "/a.jpg"), Movie(2, "", null)),
+            listOf(Movie(1, "A", "https://image.tmdb.org/t/p/w500/a.jpg"), Movie(2, "", null)),
             page.movies,
         )
     }
@@ -53,7 +53,7 @@ class MovieMapperTest {
         assertEquals(10, detail.id)
         assertEquals("T", detail.title)
         assertEquals(listOf("US"), detail.originCountry)
-        assertEquals(listOf(Cast(3, "N", "C", "/p.jpg")), detail.cast)
+        assertEquals(listOf(Cast(3, "N", "C", "https://image.tmdb.org/t/p/w500/p.jpg")), detail.cast)
     }
 
     @Test
@@ -65,8 +65,16 @@ class MovieMapperTest {
     fun `blank or null image paths map to null`() {
         val detail = MovieDetail(posterPath = "", backdropPath = null).toDomain()
 
-        assertNull(detail.posterPath)
-        assertNull(detail.backdropPath)
-        assertNull(MovieDetail.Credits.Cast(profilePath = " ").toDomain().profilePath)
+        assertNull(detail.posterUrl)
+        assertNull(detail.backdropUrl)
+        assertNull(MovieDetail.Credits.Cast(profilePath = " ").toDomain().profileUrl)
+    }
+
+    @Test
+    fun `image paths map to full urls with size`() {
+        val detail = MovieDetail(posterPath = "/p.jpg", backdropPath = "/b.jpg").toDomain()
+
+        assertEquals("https://image.tmdb.org/t/p/w500/p.jpg", detail.posterUrl)
+        assertEquals("https://image.tmdb.org/t/p/original/b.jpg", detail.backdropUrl)
     }
 }
