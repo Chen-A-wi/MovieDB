@@ -5,8 +5,8 @@ data class MovieDetail(
     val title: String = "",
     val overview: String = "",
     val releaseDate: String = "",
-    val posterPath: String = "",
-    val backdropPath: String = "",
+    val posterPath: String? = null,
+    val backdropPath: String? = null,
     val originCountry: List<String> = emptyList(),
     val cast: List<Cast> = emptyList(),
 )

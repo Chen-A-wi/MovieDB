@@ -11,13 +11,16 @@ import com.awilab.network.model.MovieDetail as MovieDetailDto
 fun SearchResults.toDomain(): MoviePage = MoviePage(
     page = page.orZero(),
     totalPages = totalPages.orZero(),
-    movies = results.orEmpty().filterNotNull().map { it.toDomain() },
+    movies = results.orEmpty()
+        .filterNotNull()
+        .filter { it.id.orZero() > 0 }
+        .map { it.toDomain() },
 )
 
 fun SearchResults.Result.toDomain(): Movie = Movie(
     id = id.orZero(),
     title = title.orEmpty(),
-    posterPath = posterPath.orEmpty(),
+    posterPath = posterPath.nullIfBlank(),
 )
 
 fun MovieDetailDto.toDomain(): MovieDetail = MovieDetail(
@@ -25,8 +28,8 @@ fun MovieDetailDto.toDomain(): MovieDetail = MovieDetail(
     title = title.orEmpty(),
     overview = overview.orEmpty(),
     releaseDate = releaseDate.orEmpty(),
-    posterPath = posterPath.orEmpty(),
-    backdropPath = backdropPath.orEmpty(),
+    posterPath = posterPath.nullIfBlank(),
+    backdropPath = backdropPath.nullIfBlank(),
     originCountry = originCountry.orEmpty().filterNotNull(),
     cast = credits?.cast.orEmpty().filterNotNull().map { it.toDomain() },
 )
@@ -35,5 +38,7 @@ fun MovieDetailDto.Credits.Cast.toDomain(): Cast = Cast(
     id = id.orZero(),
     name = name.orEmpty(),
     character = character.orEmpty(),
-    profilePath = profilePath.orEmpty(),
+    profilePath = profilePath.nullIfBlank(),
 )
+
+private fun String?.nullIfBlank(): String? = this?.takeIf { it.isNotBlank() }

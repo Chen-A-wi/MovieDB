@@ -30,7 +30,7 @@ fun SearchResultItem(
     itemData: Movie,
     onClick: () -> Unit,
 ) {
-    val imgUrl = "${BASE_IMAGE_URL}t/p/w500${itemData.posterPath}"
+    val imgUrl = itemData.posterPath?.let { "${BASE_IMAGE_URL}t/p/w500$it" }
 
     Card(
         modifier

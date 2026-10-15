@@ -15,7 +15,7 @@ import coil3.compose.SubcomposeAsyncImageContent
 
 @Composable
 fun GradientBlurBanner(
-    imgUrl: String,
+    imgUrl: String?,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         // 1. 底層：原圖
