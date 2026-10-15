@@ -1,4 +1,4 @@
-package com.awilab.data.local.search
+package com.awilab.moviedb.common.navigation
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

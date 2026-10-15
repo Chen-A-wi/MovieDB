@@ -22,9 +22,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.awilab.common.extension.orZero
-import com.awilab.data.local.search.SearchToDetailArgs
 import com.awilab.moviedb.common.navigation.MovieDbDestination
 import com.awilab.moviedb.common.navigation.NavScreen
+import com.awilab.moviedb.common.navigation.SearchToDetailArgs
 import com.awilab.moviedb.ui.widgets.LoadingPage
 import com.awilab.moviedb.ui.widgets.SearchFieldBar
 import kotlinx.coroutines.flow.distinctUntilChanged

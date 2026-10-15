@@ -3,12 +3,12 @@ package com.awilab.moviedb.ui.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.awilab.common.coroutine.CommonDispatcherProvider
-import com.awilab.data.local.search.SearchToDetailArgs
 import com.awilab.domain.model.MovieDetail
 import com.awilab.domain.model.Resource
 import com.awilab.domain.usecase.GetMovieDetailUseCase
 import com.awilab.moviedb.common.navigation.MovieDbNavigator
 import com.awilab.moviedb.common.navigation.NavScreen
+import com.awilab.moviedb.common.navigation.SearchToDetailArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
