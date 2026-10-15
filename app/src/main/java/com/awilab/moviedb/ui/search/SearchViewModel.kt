@@ -10,6 +10,7 @@ import com.awilab.moviedb.common.navigation.MovieDbNavigator
 import com.elvishew.xlog.XLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -47,8 +48,9 @@ class SearchViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-    private var currentPage = 1
+    private var currentPage = 0
     private var hasNextPage = false
+    private var searchJob: Job? = null
 
     init {
         viewModelScope.launch {
@@ -61,7 +63,7 @@ class SearchViewModel @Inject constructor(
                 .distinctUntilChanged()
                 .filter { it.isNotEmpty() }
                 .collectLatest {
-                    search()
+                    search(page = 1)
                 }
         }
     }
@@ -72,11 +74,13 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    private fun search(isLoadMore: Boolean = false) {
-        viewModelScope.launch {
+    private fun search(page: Int, isLoadMore: Boolean = false) {
+        cancelSearch()
+
+        searchJob = viewModelScope.launch {
             searchMoviesUseCase(
                 query = _query.value,
-                page = currentPage
+                page = page
             )
                 .flowOn(dispatcher.io)
                 .collect { response ->
@@ -102,6 +106,7 @@ class SearchViewModel @Inject constructor(
                                 _isLoading.update { false }
                             }
 
+                            currentPage = page
                             hasNextPage = response.data.hasNextPage
 
                             _searchResultList.update { oldList ->
@@ -114,10 +119,10 @@ class SearchViewModel @Inject constructor(
     }
 
     fun loadMore() {
-        if (hasNextPage) {
-            currentPage += 1
-            search(isLoadMore = true)
-        }
+        // 上一頁還在載入時不重複送出請求
+        if (!hasNextPage || searchJob?.isActive == true) return
+
+        search(page = currentPage + 1, isLoadMore = true)
     }
 
     fun clearQuery() {
@@ -131,8 +136,17 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun clearResults() {
+        cancelSearch()
         _searchResultList.update { emptyList() }
-        currentPage = 1
+        currentPage = 0
         hasNextPage = false
+    }
+
+    // 取消進行中的請求，避免舊查詢的結果接到新列表，並重設 loading 狀態
+    private fun cancelSearch() {
+        searchJob?.cancel()
+        searchJob = null
+        _isLoading.update { false }
+        _isLoadingMore.update { false }
     }
 }
