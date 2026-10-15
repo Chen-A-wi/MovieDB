@@ -14,7 +14,7 @@ class DetailRepositoryImpl @Inject constructor(
     private val detailService: DetailService,
 ) : DetailRepository {
 
-    override suspend fun getMovieDetail(
+    override fun getMovieDetail(
         movieId: Int,
         language: String
     ): Flow<Resource<MovieDetail>> {

@@ -5,7 +5,7 @@ import com.awilab.domain.model.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface DetailRepository {
-    suspend fun getMovieDetail(
+    fun getMovieDetail(
         movieId: Int,
         language: String = "en",
     ): Flow<Resource<MovieDetail>>

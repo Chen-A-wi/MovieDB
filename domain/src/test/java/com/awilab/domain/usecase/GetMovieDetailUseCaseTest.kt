@@ -16,7 +16,7 @@ class GetMovieDetailUseCaseTest {
     fun `movie id is forwarded to repository`() = runBlocking {
         var requestedId: Int? = null
         val repository = object : DetailRepository {
-            override suspend fun getMovieDetail(
+            override fun getMovieDetail(
                 movieId: Int,
                 language: String,
             ): Flow<Resource<MovieDetail>> {

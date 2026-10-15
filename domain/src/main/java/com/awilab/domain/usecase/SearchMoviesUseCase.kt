@@ -9,7 +9,7 @@ import javax.inject.Inject
 class SearchMoviesUseCase @Inject constructor(
     private val searchRepository: SearchRepository,
 ) {
-    suspend operator fun invoke(
+    operator fun invoke(
         query: String,
         page: Int,
     ): Flow<Resource<MoviePage>> {

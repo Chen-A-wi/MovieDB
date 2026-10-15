@@ -5,7 +5,7 @@ import com.awilab.domain.model.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface SearchRepository {
-    suspend fun searchMovie(
+    fun searchMovie(
         query: String,
         page: Int,
         language: String = "en",
