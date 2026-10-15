@@ -5,19 +5,22 @@ import com.awilab.domain.model.Movie
 import com.awilab.network.model.MovieDetail
 import com.awilab.network.model.SearchResults
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 class MovieMapperTest {
 
     @Test
-    fun `SearchResults maps to MoviePage and drops null results`() {
+    fun `SearchResults maps to MoviePage and drops null or id-less results`() {
         val dto = SearchResults(
             page = 2,
             totalPages = 5,
             results = listOf(
                 SearchResults.Result(id = 1, title = "A", posterPath = "/a.jpg"),
                 null,
-                SearchResults.Result(id = null, title = null, posterPath = null),
+                SearchResults.Result(id = null, title = "no id"),
+                SearchResults.Result(id = 0, title = "zero id"),
+                SearchResults.Result(id = 2, title = null, posterPath = "  "),
             ),
         )
 
@@ -26,7 +29,7 @@ class MovieMapperTest {
         assertEquals(2, page.page)
         assertEquals(5, page.totalPages)
         assertEquals(
-            listOf(Movie(1, "A", "/a.jpg"), Movie(0, "", "")),
+            listOf(Movie(1, "A", "/a.jpg"), Movie(2, "", null)),
             page.movies,
         )
     }
@@ -56,5 +59,14 @@ class MovieMapperTest {
     @Test
     fun `MovieDetail with null credits maps to empty cast`() {
         assertEquals(emptyList<Cast>(), MovieDetail(credits = null).toDomain().cast)
+    }
+
+    @Test
+    fun `blank or null image paths map to null`() {
+        val detail = MovieDetail(posterPath = "", backdropPath = null).toDomain()
+
+        assertNull(detail.posterPath)
+        assertNull(detail.backdropPath)
+        assertNull(MovieDetail.Credits.Cast(profilePath = " ").toDomain().profilePath)
     }
 }

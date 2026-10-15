@@ -37,7 +37,7 @@ import com.awilab.network.di.BASE_IMAGE_URL
 fun ActorItemView(
     castInfo: Cast,
 ) {
-    val actorUrl = "${BASE_IMAGE_URL}t/p/w500${castInfo.profilePath}"
+    val actorUrl = castInfo.profilePath?.let { "${BASE_IMAGE_URL}t/p/w500$it" }
 
     Card(
         modifier = Modifier

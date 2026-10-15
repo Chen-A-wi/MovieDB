@@ -52,8 +52,8 @@ fun DetailHeader(
 ) {
     val movieInfo by vm.movieInfo.collectAsStateWithLifecycle()
 
-    val imgUrl = "${BASE_IMAGE_URL}t/p/w500${movieInfo.posterPath}"
-    val backgroundUrl = "${BASE_IMAGE_URL}t/p/original${movieInfo.backdropPath}"
+    val imgUrl = movieInfo.posterPath?.let { "${BASE_IMAGE_URL}t/p/w500$it" }
+    val backgroundUrl = movieInfo.backdropPath?.let { "${BASE_IMAGE_URL}t/p/original$it" }
 
     Box(
         modifier = Modifier
