@@ -18,7 +18,7 @@ class SearchMoviesUseCaseTest {
         var lastQuery: String? = null
         var lastPage: Int? = null
 
-        override suspend fun searchMovie(
+        override fun searchMovie(
             query: String,
             page: Int,
             language: String,

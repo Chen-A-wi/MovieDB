@@ -14,7 +14,7 @@ class SearchRepositoryImpl @Inject constructor(
     private val searchService: SearchService,
 ) : SearchRepository {
 
-    override suspend fun searchMovie(
+    override fun searchMovie(
         query: String,
         page: Int,
         language: String,
