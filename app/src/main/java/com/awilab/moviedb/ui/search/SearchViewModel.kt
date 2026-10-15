@@ -3,11 +3,10 @@ package com.awilab.moviedb.ui.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.awilab.common.coroutine.CommonDispatcherProvider
-import com.awilab.common.extension.orZero
+import com.awilab.domain.model.Movie
+import com.awilab.domain.model.Resource
 import com.awilab.domain.repository.SearchRepository
 import com.awilab.moviedb.common.navigation.MovieDbNavigator
-import com.awilab.network.ApiResponse
-import com.awilab.network.model.SearchResults
 import com.elvishew.xlog.XLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
@@ -38,8 +37,8 @@ class SearchViewModel @Inject constructor(
 
     private val queryFlow = MutableSharedFlow<String>(replay = 0)
 
-    private val _searchResultList = MutableStateFlow<List<SearchResults.Result>>(listOf())
-    val searchResultList: StateFlow<List<SearchResults.Result>> = _searchResultList.asStateFlow()
+    private val _searchResultList = MutableStateFlow<List<Movie>>(listOf())
+    val searchResultList: StateFlow<List<Movie>> = _searchResultList.asStateFlow()
 
     private val _isLoadingMore = MutableStateFlow(false)
     val isLoadingMore: StateFlow<Boolean> = _isLoadingMore
@@ -81,7 +80,7 @@ class SearchViewModel @Inject constructor(
                 .flowOn(dispatcher.io)
                 .collect { response ->
                     when (response) {
-                        is ApiResponse.Loading -> {
+                        is Resource.Loading -> {
                             if (isLoadMore) {
                                 _isLoadingMore.update { true }
                             } else {
@@ -89,25 +88,23 @@ class SearchViewModel @Inject constructor(
                             }
                         }
 
-                        is ApiResponse.Error -> {
+                        is Resource.Error -> {
                             _isLoadingMore.update { false }
                             _isLoading.update { false }
                             XLog.d("${response.exception}")
                         }
 
-                        is ApiResponse.Success -> {
+                        is Resource.Success -> {
                             if (isLoadMore) {
                                 _isLoadingMore.update { false }
                             } else {
                                 _isLoading.update { false }
                             }
 
-                            totalPage = response.data.totalPages.orZero()
+                            totalPage = response.data.totalPages
 
-                            response.data.results?.let {
-                                _searchResultList.update { oldList ->
-                                    oldList + it.filterNotNull()
-                                }
+                            _searchResultList.update { oldList ->
+                                oldList + response.data.movies
                             }
                         }
                     }

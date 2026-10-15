@@ -109,7 +109,7 @@ fun MovieInfo(
     val movieInfo by vm.movieInfo.collectAsStateWithLifecycle()
 
     Text(
-        text = movieInfo.title.orEmpty(),
+        text = movieInfo.title,
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .fillMaxWidth(),
@@ -126,14 +126,14 @@ fun MovieInfo(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(movieInfo.releaseDate.orEmpty())
+            Text(movieInfo.releaseDate)
 
-            if (!movieInfo.originCountry.isNullOrEmpty()) {
+            if (movieInfo.originCountry.isNotEmpty()) {
                 FlowRow {
-                    movieInfo.originCountry?.forEach { country ->
+                    movieInfo.originCountry.forEach { country ->
                         Text("．")
                         Text(
-                            text = country.orEmpty(),
+                            text = country,
                             modifier = Modifier
                                 .border(
                                     width = 2.dp,
@@ -161,11 +161,11 @@ fun MovieInfo(
             modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp)
         )
 
-        if (movieInfo.overview.isNullOrBlank()) {
+        if (movieInfo.overview.isBlank()) {
             NoResults()
         } else {
             Text(
-                movieInfo.overview.orEmpty(),
+                movieInfo.overview,
                 modifier = Modifier
                     .padding(vertical = 4.dp, horizontal = 16.dp)
                     .fillMaxWidth(),
@@ -202,13 +202,13 @@ fun CastLayout(
         modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp)
     )
 
-    if (movieInfo.credits?.cast.isNullOrEmpty()) {
+    if (movieInfo.cast.isEmpty()) {
         NoResults()
     } else {
         LazyRow(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            items(movieInfo.credits?.cast.orEmpty()) { castInfo ->
+            items(movieInfo.cast) { castInfo ->
                 ActorItemView(castInfo)
             }
         }

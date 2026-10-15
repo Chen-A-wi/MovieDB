@@ -30,14 +30,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
+import com.awilab.domain.model.Cast
 import com.awilab.network.di.BASE_IMAGE_URL
-import com.awilab.network.model.MovieDetail
 
 @Composable
 fun ActorItemView(
-    castInfo: MovieDetail.Credits.Cast?,
+    castInfo: Cast,
 ) {
-    val actorUrl = "${BASE_IMAGE_URL}t/p/w500${castInfo?.profilePath.orEmpty()}"
+    val actorUrl = "${BASE_IMAGE_URL}t/p/w500${castInfo.profilePath}"
 
     Card(
         modifier = Modifier
@@ -93,7 +93,7 @@ fun ActorItemView(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
-                        text = castInfo?.name.orEmpty(),
+                        text = castInfo.name,
                         textAlign = TextAlign.Start,
                         modifier = Modifier
                             .padding(start = 8.dp, end = 8.dp, top = 16.dp, bottom = 8.dp)
@@ -108,7 +108,7 @@ fun ActorItemView(
                     )
 
                     Text(
-                        text = castInfo?.character.orEmpty(),
+                        text = castInfo.character,
                         textAlign = TextAlign.Start,
                         modifier = Modifier
                             .padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
