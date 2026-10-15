@@ -6,7 +6,7 @@ import com.awilab.common.coroutine.CommonDispatcherProvider
 import com.awilab.data.local.search.SearchToDetailArgs
 import com.awilab.domain.model.MovieDetail
 import com.awilab.domain.model.Resource
-import com.awilab.domain.repository.DetailRepository
+import com.awilab.domain.usecase.GetMovieDetailUseCase
 import com.awilab.moviedb.common.navigation.MovieDbNavigator
 import com.awilab.moviedb.common.navigation.NavScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val detailRepository: DetailRepository,
+    private val getMovieDetailUseCase: GetMovieDetailUseCase,
     private val dispatcher: CommonDispatcherProvider,
     val navigator: MovieDbNavigator
 ) : ViewModel() {
@@ -43,9 +43,7 @@ class DetailViewModel @Inject constructor(
 
     private fun getMovieDetail(movieId: Int) {
         viewModelScope.launch {
-            detailRepository.getMovieDetail(
-                movieId = movieId.toString(),
-            )
+            getMovieDetailUseCase(movieId = movieId)
                 .flowOn(dispatcher.io)
                 .collect { response ->
                     when(response) {
