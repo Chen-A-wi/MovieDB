@@ -25,7 +25,6 @@ import com.awilab.common.extension.orZero
 import com.awilab.data.local.search.SearchToDetailArgs
 import com.awilab.moviedb.common.navigation.MovieDbDestination
 import com.awilab.moviedb.common.navigation.NavScreen
-import com.awilab.moviedb.ui.widgets.LoadingItem
 import com.awilab.moviedb.ui.widgets.LoadingPage
 import com.awilab.moviedb.ui.widgets.SearchFieldBar
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -88,7 +87,7 @@ fun SearchPage(
                         SearchResultItem(itemData = item) {
                             vm.navigator.navigateWithBundle(
                                 bundleKey = NavScreen.Search.ARG_RESULT,
-                                data = SearchToDetailArgs(item.id.orZero()),
+                                data = SearchToDetailArgs(item.id),
                                 route = MovieDbDestination.DetailDestination.route
                             )
                         }
