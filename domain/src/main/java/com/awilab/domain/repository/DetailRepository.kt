@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface DetailRepository {
     suspend fun getMovieDetail(
-        movieId: String,
+        movieId: Int,
         language: String = "en",
     ): Flow<Resource<MovieDetail>>
 }

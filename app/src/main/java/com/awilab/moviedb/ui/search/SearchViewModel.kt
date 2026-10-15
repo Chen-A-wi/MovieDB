@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.awilab.common.coroutine.CommonDispatcherProvider
 import com.awilab.domain.model.Movie
 import com.awilab.domain.model.Resource
-import com.awilab.domain.repository.SearchRepository
+import com.awilab.domain.usecase.SearchMoviesUseCase
 import com.awilab.moviedb.common.navigation.MovieDbNavigator
 import com.elvishew.xlog.XLog
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,11 +24,12 @@ import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(FlowPreview::class)
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val searchRepository: SearchRepository,
+    private val searchMoviesUseCase: SearchMoviesUseCase,
     private val dispatcher: CommonDispatcherProvider,
     val navigator: MovieDbNavigator,
 ) : ViewModel() {
@@ -47,7 +48,7 @@ class SearchViewModel @Inject constructor(
     val isLoading: StateFlow<Boolean> = _isLoading
 
     private var currentPage = 1
-    private var totalPage = 0
+    private var hasNextPage = false
 
     init {
         viewModelScope.launch {
@@ -56,7 +57,7 @@ class SearchViewModel @Inject constructor(
                     clearResults()
                     emit(it)
                 }
-                .debounce(300L)
+                .debounce(300L.milliseconds)
                 .distinctUntilChanged()
                 .filter { it.isNotEmpty() }
                 .collectLatest {
@@ -73,7 +74,7 @@ class SearchViewModel @Inject constructor(
 
     private fun search(isLoadMore: Boolean = false) {
         viewModelScope.launch {
-            searchRepository.searchMovie(
+            searchMoviesUseCase(
                 query = _query.value,
                 page = currentPage
             )
@@ -101,7 +102,7 @@ class SearchViewModel @Inject constructor(
                                 _isLoading.update { false }
                             }
 
-                            totalPage = response.data.totalPages
+                            hasNextPage = response.data.hasNextPage
 
                             _searchResultList.update { oldList ->
                                 oldList + response.data.movies
@@ -113,7 +114,7 @@ class SearchViewModel @Inject constructor(
     }
 
     fun loadMore() {
-        if (currentPage <= totalPage) {
+        if (hasNextPage) {
             currentPage += 1
             search(isLoadMore = true)
         }
@@ -132,6 +133,6 @@ class SearchViewModel @Inject constructor(
     private fun clearResults() {
         _searchResultList.update { emptyList() }
         currentPage = 1
-        totalPage = 0
+        hasNextPage = false
     }
 }

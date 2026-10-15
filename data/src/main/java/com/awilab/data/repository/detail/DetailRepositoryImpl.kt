@@ -15,12 +15,12 @@ class DetailRepositoryImpl @Inject constructor(
 ) : DetailRepository {
 
     override suspend fun getMovieDetail(
-        movieId: String,
+        movieId: Int,
         language: String
     ): Flow<Resource<MovieDetail>> {
         return flow {
             detailService.getMovieDetail(
-                movieId = movieId,
+                movieId = movieId.toString(),
                 language = language,
             ).also { response ->
                 emit(response.toDomain())
