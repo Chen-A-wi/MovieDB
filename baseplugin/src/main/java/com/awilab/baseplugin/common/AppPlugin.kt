@@ -91,7 +91,7 @@ class AppPlugin : Plugin<Project> {
                 "implementation"(libs.kotlinx.serialization.json)
 
                 //region Hilt
-                "implementation"(libs.androidx.hilt.navigation.compose)
+                "implementation"(libs.androidx.hilt.lifecycle.viewmodel.compose)
                 "implementation"(libs.hilt.android)
                 "ksp"(libs.hilt.compiler)
                 //endregion
