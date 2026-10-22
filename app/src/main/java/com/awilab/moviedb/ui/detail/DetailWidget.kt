@@ -35,7 +35,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
@@ -47,7 +46,7 @@ import com.elvishew.xlog.XLog
 
 @Composable
 fun DetailHeader(
-    vm: DetailViewModel = hiltViewModel()
+    vm: DetailViewModel
 ) {
     val movieInfo by vm.movieInfo.collectAsStateWithLifecycle()
 
@@ -100,7 +99,7 @@ fun DetailHeader(
 
 @Composable
 fun MovieInfo(
-    vm: DetailViewModel = hiltViewModel()
+    vm: DetailViewModel
 ) {
     val movieInfo by vm.movieInfo.collectAsStateWithLifecycle()
 
@@ -185,7 +184,7 @@ fun NoResults() {
 
 @Composable
 fun CastLayout(
-    vm: DetailViewModel = hiltViewModel()
+    vm: DetailViewModel
 ) {
     val movieInfo by vm.movieInfo.collectAsStateWithLifecycle()
 
