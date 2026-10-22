@@ -19,3 +19,5 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+# Guava references compile-only j2objc annotations
+-dontwarn com.google.j2objc.annotations.**
