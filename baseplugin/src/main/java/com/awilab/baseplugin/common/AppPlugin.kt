@@ -86,6 +86,7 @@ class AppPlugin : Plugin<Project> {
                 "implementation"(libs.xlog)
 
                 "testImplementation"(libs.junit)
+                "testImplementation"(project(":testing"))
                 "androidTestImplementation"(libs.androidx.junit)
                 "androidTestImplementation"(libs.androidx.espresso.core)
             }

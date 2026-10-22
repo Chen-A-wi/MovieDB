@@ -22,6 +22,10 @@ gradlePlugin {
             id = "com.awilab.composeplugin"
             implementationClass = "com.awilab.baseplugin.common.ComposePlugin"
         }
+        create("TestingLibPlugin") {
+            id = "com.awilab.testinglibplugin"
+            implementationClass = "com.awilab.baseplugin.common.TestingLibPlugin"
+        }
         create("KtlintPlugin") {
             id = "com.awilab.ktlintplugin"
             implementationClass = "com.awilab.baseplugin.quality.KtlintPlugin"
