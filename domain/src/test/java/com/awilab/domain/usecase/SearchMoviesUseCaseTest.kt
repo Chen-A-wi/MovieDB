@@ -3,13 +3,11 @@ package com.awilab.domain.usecase
 import com.awilab.domain.model.MoviePage
 import com.awilab.domain.model.Resource
 import com.awilab.domain.repository.SearchRepository
+import com.awilab.testing.shouldBe
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class SearchMoviesUseCaseTest {
@@ -35,15 +33,15 @@ class SearchMoviesUseCaseTest {
 
         val result = SearchMoviesUseCase(repository)("  batman ", 2).toList()
 
-        assertEquals("batman", repository.lastQuery)
-        assertEquals(2, repository.lastPage)
-        assertEquals(listOf(Resource.Success(MoviePage(2, 3, emptyList()))), result)
+        repository.lastQuery shouldBe "batman"
+        repository.lastPage shouldBe 2
+        result shouldBe listOf(Resource.Success(MoviePage(2, 3, emptyList())))
     }
 
     @Test
     fun `hasNextPage is false on last page`() {
-        assertTrue(MoviePage(page = 2, totalPages = 3, movies = emptyList()).hasNextPage)
-        assertFalse(MoviePage(page = 3, totalPages = 3, movies = emptyList()).hasNextPage)
-        assertFalse(MoviePage(page = 0, totalPages = 0, movies = emptyList()).hasNextPage)
+        MoviePage(page = 2, totalPages = 3, movies = emptyList()).hasNextPage shouldBe true
+        MoviePage(page = 3, totalPages = 3, movies = emptyList()).hasNextPage shouldBe false
+        MoviePage(page = 0, totalPages = 0, movies = emptyList()).hasNextPage shouldBe false
     }
 }
