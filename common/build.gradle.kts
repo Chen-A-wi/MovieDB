@@ -5,7 +5,3 @@ plugins {
 android {
     namespace = "com.awilab.common"
 }
-
-dependencies {
-    implementation(libs.truth)
-}
