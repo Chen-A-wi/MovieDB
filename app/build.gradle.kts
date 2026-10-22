@@ -1,5 +1,3 @@
-import com.awilab.baseplugin.configs.Version
-
 plugins {
     id("com.awilab.appplugin")
     id("com.awilab.composeplugin")
@@ -12,10 +10,6 @@ android {
 
     defaultConfig {
         applicationId = "com.awilab.moviedb"
-    }
-
-    kotlinOptions {
-        jvmTarget = Version.jdk.toString()
     }
 }
 

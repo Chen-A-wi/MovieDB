@@ -3,6 +3,7 @@ package com.awilab.baseplugin.common
 import com.android.build.api.dsl.ApplicationExtension
 import com.awilab.baseplugin.configs.Version
 import com.awilab.baseplugin.extension.configureAndroid
+import com.awilab.baseplugin.extension.configureApiBuildConfigFields
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -10,8 +11,6 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.the
-import java.util.Properties
-import kotlin.properties.Delegates
 
 class AppPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -20,7 +19,6 @@ class AppPlugin : Plugin<Project> {
 
             with(pluginManager) {
                 apply(libs.plugins.android.application.get().pluginId)
-                apply(libs.plugins.kotlin.android.get().pluginId)
                 apply(libs.plugins.kotlin.serialization.get().pluginId)
                 apply(libs.plugins.ksp.get().pluginId)
                 apply(libs.plugins.hilt.get().pluginId)
@@ -48,7 +46,7 @@ class AppPlugin : Plugin<Project> {
                 buildTypes {
                     release {
                         isMinifyEnabled = true
-                        proguardFiles("proguard-android-optimize.txt", "proguard-rules.pro")
+                        proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
                     }
 
                     debug {
@@ -57,24 +55,11 @@ class AppPlugin : Plugin<Project> {
                 }
 
                 productFlavors {
-                    var apiKey by Delegates.notNull<String>()
-                    var apiToken by Delegates.notNull<String>()
-
-                    Properties().apply {
-                        load(project.rootProject.file("local.properties").inputStream())
-                        apiKey = getProperty("API_KEY")
-                        apiToken = getProperty("API_TOKEN")
-                    }
-
                     create("dev") {
                         resValue("string", "app_name", "(DEV)MovieDB")
-                        buildConfigField("String", "API_KEY", apiKey)
-                        buildConfigField("String", "API_TOKEN", apiToken)
                     }
                     create("prod") {
                         resValue("string", "app_name", "MovieDB")
-                        buildConfigField("String", "API_KEY", apiKey)
-                        buildConfigField("String", "API_TOKEN", apiToken)
                     }
                 }
 
@@ -84,6 +69,8 @@ class AppPlugin : Plugin<Project> {
                     }
                 }
             }
+
+            configureApiBuildConfigFields()
 
             dependencies {
                 "implementation"(libs.androidx.core.ktx)
