@@ -69,7 +69,6 @@ class BaseLibPlugin : Plugin<Project> {
                 "implementation"(libs.material)
 
                 //region Hilt
-                "implementation"(libs.androidx.hilt.navigation.compose)
                 "implementation"(libs.hilt.android)
                 "ksp"(libs.hilt.compiler)
                 //endregion
