@@ -12,49 +12,52 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.rememberNavController
-import com.awilab.moviedb.common.navigation.MovieDbNavHost
-import com.awilab.moviedb.common.navigation.MovieDbNavigator
-import com.awilab.moviedb.common.navigation.bottomNavPages
+import com.awilab.moviedb.common.navigation.HomeRoute
+import com.awilab.moviedb.common.navigation.MovieDbNavDisplay
+import com.awilab.moviedb.common.navigation.Navigator
+import com.awilab.moviedb.common.navigation.rememberNavigationState
+import com.awilab.moviedb.common.navigation.topLevelRoutes
 import com.awilab.moviedb.ui.theme.MovieDBTheme
 import com.awilab.moviedb.ui.widgets.BottomNavBar
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject
-    lateinit var navigator: MovieDbNavigator
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
         setContent {
-            val navController = rememberNavController()
-
-            navigator.navController = navController
+            val navigationState = rememberNavigationState(
+                startRoute = HomeRoute,
+                topLevelRoutes = topLevelRoutes,
+            )
+            val navigator = remember(navigationState) { Navigator(navigationState) }
 
             MovieDBTheme {
                 Scaffold(modifier = Modifier
                     .fillMaxSize(),
                     bottomBar = {
                         AnimatedVisibility(
-                            visible = bottomNavPages.any { it.route == navigator.getCurrentRoute() },
+                            visible = navigationState.currentRoute in topLevelRoutes,
                             enter = slideInVertically(initialOffsetY = { it }),
                             exit = slideOutVertically(targetOffsetY = { it })
                         ) {
-                            BottomNavBar(navigator = navigator)
+                            BottomNavBar(
+                                selectedRoute = navigationState.topLevelRoute,
+                                onItemClick = navigator::navigate,
+                            )
                         }
                     }
                 ) { innerPadding ->
-                    MovieDbNavHost(
+                    MovieDbNavDisplay(
+                        navigationState = navigationState,
                         navigator = navigator,
                         modifier = Modifier
                             .padding(innerPadding)
-                            .consumeWindowInsets(innerPadding)  // 取消 NavHost 到內部會預留的 padding
+                            .consumeWindowInsets(innerPadding)  // 取消 NavDisplay 到內部會預留的 padding
                     )
                 }
             }

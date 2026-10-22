@@ -22,9 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.awilab.common.extension.orZero
-import com.awilab.moviedb.common.navigation.MovieDbDestination
-import com.awilab.moviedb.common.navigation.NavScreen
-import com.awilab.moviedb.common.navigation.SearchToDetailArgs
 import com.awilab.moviedb.ui.widgets.LoadingPage
 import com.awilab.moviedb.ui.widgets.SearchFieldBar
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -32,6 +29,7 @@ import kotlinx.coroutines.flow.map
 
 @Composable
 fun SearchPage(
+    onMovieClick: (movieId: Int) -> Unit,
     vm: SearchViewModel = hiltViewModel(),
 ) {
     val keyword by vm.query.collectAsStateWithLifecycle()
@@ -85,11 +83,7 @@ fun SearchPage(
                 ) {
                     items(resultList) { item ->
                         SearchResultItem(itemData = item) {
-                            vm.navigator.navigateWithBundle(
-                                bundleKey = NavScreen.Search.ARG_RESULT,
-                                data = SearchToDetailArgs(item.id),
-                                route = MovieDbDestination.DetailDestination.route
-                            )
+                            onMovieClick(item.id)
                         }
                     }
 
