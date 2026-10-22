@@ -1,6 +1,6 @@
 package com.awilab.network
 
-import com.awilab.common.extension.shouldBe
+import com.awilab.testing.shouldBe
 import org.junit.Test
 
 /**
