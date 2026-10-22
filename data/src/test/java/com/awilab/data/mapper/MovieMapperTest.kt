@@ -4,8 +4,7 @@ import com.awilab.domain.model.Cast
 import com.awilab.domain.model.Movie
 import com.awilab.network.model.MovieDetail
 import com.awilab.network.model.SearchResults
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import com.awilab.testing.shouldBe
 import org.junit.Test
 
 class MovieMapperTest {
@@ -26,12 +25,9 @@ class MovieMapperTest {
 
         val page = dto.toDomain()
 
-        assertEquals(2, page.page)
-        assertEquals(5, page.totalPages)
-        assertEquals(
-            listOf(Movie(1, "A", "https://image.tmdb.org/t/p/w500/a.jpg"), Movie(2, "", null)),
-            page.movies,
-        )
+        page.page shouldBe 2
+        page.totalPages shouldBe 5
+        page.movies shouldBe listOf(Movie(1, "A", "https://image.tmdb.org/t/p/w500/a.jpg"), Movie(2, "", null))
     }
 
     @Test
@@ -50,31 +46,31 @@ class MovieMapperTest {
 
         val detail = dto.toDomain()
 
-        assertEquals(10, detail.id)
-        assertEquals("T", detail.title)
-        assertEquals(listOf("US"), detail.originCountry)
-        assertEquals(listOf(Cast(3, "N", "C", "https://image.tmdb.org/t/p/w500/p.jpg")), detail.cast)
+        detail.id shouldBe 10
+        detail.title shouldBe "T"
+        detail.originCountry shouldBe listOf("US")
+        detail.cast shouldBe listOf(Cast(3, "N", "C", "https://image.tmdb.org/t/p/w500/p.jpg"))
     }
 
     @Test
     fun `MovieDetail with null credits maps to empty cast`() {
-        assertEquals(emptyList<Cast>(), MovieDetail(credits = null).toDomain().cast)
+        MovieDetail(credits = null).toDomain().cast shouldBe emptyList()
     }
 
     @Test
     fun `blank or null image paths map to null`() {
         val detail = MovieDetail(posterPath = "", backdropPath = null).toDomain()
 
-        assertNull(detail.posterUrl)
-        assertNull(detail.backdropUrl)
-        assertNull(MovieDetail.Credits.Cast(profilePath = " ").toDomain().profileUrl)
+        detail.posterUrl shouldBe null
+        detail.backdropUrl shouldBe null
+        MovieDetail.Credits.Cast(profilePath = " ").toDomain().profileUrl shouldBe null
     }
 
     @Test
     fun `image paths map to full urls with size`() {
         val detail = MovieDetail(posterPath = "/p.jpg", backdropPath = "/b.jpg").toDomain()
 
-        assertEquals("https://image.tmdb.org/t/p/w500/p.jpg", detail.posterUrl)
-        assertEquals("https://image.tmdb.org/t/p/original/b.jpg", detail.backdropUrl)
+        detail.posterUrl shouldBe "https://image.tmdb.org/t/p/w500/p.jpg"
+        detail.backdropUrl shouldBe "https://image.tmdb.org/t/p/original/b.jpg"
     }
 }

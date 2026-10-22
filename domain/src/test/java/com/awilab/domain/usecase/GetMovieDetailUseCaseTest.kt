@@ -3,11 +3,11 @@ package com.awilab.domain.usecase
 import com.awilab.domain.model.MovieDetail
 import com.awilab.domain.model.Resource
 import com.awilab.domain.repository.DetailRepository
+import com.awilab.testing.shouldBe
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class GetMovieDetailUseCaseTest {
@@ -27,7 +27,7 @@ class GetMovieDetailUseCaseTest {
 
         val result = GetMovieDetailUseCase(repository)(42).toList()
 
-        assertEquals(42, requestedId)
-        assertEquals(listOf(Resource.Success(MovieDetail(id = 42))), result)
+        requestedId shouldBe 42
+        result shouldBe listOf(Resource.Success(MovieDetail(id = 42)))
     }
 }
