@@ -35,7 +35,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
@@ -43,17 +42,13 @@ import com.awilab.moviedb.R
 import com.awilab.moviedb.ui.widgets.ActorItemView
 import com.awilab.moviedb.ui.widgets.GradientBlurBanner
 import com.awilab.moviedb.ui.widgets.LoadingItem
-import com.awilab.network.di.BASE_IMAGE_URL
 import com.elvishew.xlog.XLog
 
 @Composable
 fun DetailHeader(
-    vm: DetailViewModel = hiltViewModel()
+    vm: DetailViewModel
 ) {
     val movieInfo by vm.movieInfo.collectAsStateWithLifecycle()
-
-    val imgUrl = "${BASE_IMAGE_URL}t/p/w500${movieInfo.posterPath}"
-    val backgroundUrl = "${BASE_IMAGE_URL}t/p/original${movieInfo.backdropPath}"
 
     Box(
         modifier = Modifier
@@ -62,7 +57,7 @@ fun DetailHeader(
     ) {
 
         GradientBlurBanner(
-            imgUrl = backgroundUrl,
+            imgUrl = movieInfo.backdropUrl,
         )
 
         Card(
@@ -75,7 +70,7 @@ fun DetailHeader(
             elevation = CardDefaults.cardElevation(4.dp)
         ) {
             SubcomposeAsyncImage(
-                model = imgUrl,
+                model = movieInfo.posterUrl,
                 contentDescription = null,
                 contentScale = ContentScale.FillHeight,
                 loading = {
@@ -104,12 +99,12 @@ fun DetailHeader(
 
 @Composable
 fun MovieInfo(
-    vm: DetailViewModel = hiltViewModel()
+    vm: DetailViewModel
 ) {
     val movieInfo by vm.movieInfo.collectAsStateWithLifecycle()
 
     Text(
-        text = movieInfo.title.orEmpty(),
+        text = movieInfo.title,
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .fillMaxWidth(),
@@ -126,14 +121,14 @@ fun MovieInfo(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(movieInfo.releaseDate.orEmpty())
+            Text(movieInfo.releaseDate)
 
-            if (!movieInfo.originCountry.isNullOrEmpty()) {
+            if (movieInfo.originCountry.isNotEmpty()) {
                 FlowRow {
-                    movieInfo.originCountry?.forEach { country ->
+                    movieInfo.originCountry.forEach { country ->
                         Text("．")
                         Text(
-                            text = country.orEmpty(),
+                            text = country,
                             modifier = Modifier
                                 .border(
                                     width = 2.dp,
@@ -161,11 +156,11 @@ fun MovieInfo(
             modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp)
         )
 
-        if (movieInfo.overview.isNullOrBlank()) {
+        if (movieInfo.overview.isBlank()) {
             NoResults()
         } else {
             Text(
-                movieInfo.overview.orEmpty(),
+                movieInfo.overview,
                 modifier = Modifier
                     .padding(vertical = 4.dp, horizontal = 16.dp)
                     .fillMaxWidth(),
@@ -189,7 +184,7 @@ fun NoResults() {
 
 @Composable
 fun CastLayout(
-    vm: DetailViewModel = hiltViewModel()
+    vm: DetailViewModel
 ) {
     val movieInfo by vm.movieInfo.collectAsStateWithLifecycle()
 
@@ -202,13 +197,13 @@ fun CastLayout(
         modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp)
     )
 
-    if (movieInfo.credits?.cast.isNullOrEmpty()) {
+    if (movieInfo.cast.isEmpty()) {
         NoResults()
     } else {
         LazyRow(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            items(movieInfo.credits?.cast.orEmpty()) { castInfo ->
+            items(movieInfo.cast) { castInfo ->
                 ActorItemView(castInfo)
             }
         }

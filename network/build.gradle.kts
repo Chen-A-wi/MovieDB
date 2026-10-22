@@ -1,5 +1,3 @@
-import com.awilab.baseplugin.configs.Version
-
 plugins {
     id("com.awilab.baselibplugin")
     alias(libs.plugins.kotlin.serialization)
@@ -7,10 +5,6 @@ plugins {
 
 android {
     namespace = "com.awilab.network"
-
-    kotlinOptions {
-        jvmTarget = Version.jdk.toString()
-    }
 }
 
 dependencies {

@@ -1,13 +1,13 @@
 package com.awilab.domain.repository
 
-import com.awilab.network.ApiResponse
-import com.awilab.network.model.SearchResults
+import com.awilab.domain.model.MoviePage
+import com.awilab.domain.model.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface SearchRepository {
-    suspend fun searchMovie(
+    fun searchMovie(
         query: String,
         page: Int,
         language: String = "en",
-    ): Flow<ApiResponse<SearchResults>>
+    ): Flow<Resource<MoviePage>>
 }

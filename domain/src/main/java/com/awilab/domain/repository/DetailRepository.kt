@@ -1,12 +1,12 @@
 package com.awilab.domain.repository
 
-import com.awilab.network.ApiResponse
-import com.awilab.network.model.MovieDetail
+import com.awilab.domain.model.MovieDetail
+import com.awilab.domain.model.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface DetailRepository {
-    suspend fun getMovieDetail(
-        movieId: String,
+    fun getMovieDetail(
+        movieId: Int,
         language: String = "en",
-    ): Flow<ApiResponse<MovieDetail>>
+    ): Flow<Resource<MovieDetail>>
 }

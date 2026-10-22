@@ -16,12 +16,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.awilab.moviedb.R
 import com.awilab.moviedb.ui.widgets.LoadingPage
@@ -29,16 +27,13 @@ import com.awilab.moviedb.ui.widgets.LoadingPage
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailPage(
-    vm: DetailViewModel = hiltViewModel(),
+    vm: DetailViewModel,
+    onBack: () -> Unit,
 ) {
     val isLoading by vm.isLoading.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-
-    LaunchedEffect(Unit) {
-        vm.initMovieDetail()
-    }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -47,7 +42,7 @@ fun DetailPage(
                 title = { stringResource(R.string.lab_empty) },
                 scrollBehavior = scrollBehavior,
                 navigationIcon = {
-                    IconButton(onClick = { vm.navigator.goBack() }) {
+                    IconButton(onClick = onBack) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
@@ -68,11 +63,11 @@ fun DetailPage(
                 Column(
                     modifier = Modifier.verticalScroll(scrollState),
                 ) {
-                    DetailHeader()
+                    DetailHeader(vm = vm)
 
-                    MovieInfo()
+                    MovieInfo(vm = vm)
 
-                    CastLayout()
+                    CastLayout(vm = vm)
                 }
             }
         }

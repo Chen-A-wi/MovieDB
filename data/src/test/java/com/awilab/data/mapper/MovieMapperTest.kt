@@ -1,0 +1,80 @@
+package com.awilab.data.mapper
+
+import com.awilab.domain.model.Cast
+import com.awilab.domain.model.Movie
+import com.awilab.network.model.MovieDetail
+import com.awilab.network.model.SearchResults
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Test
+
+class MovieMapperTest {
+
+    @Test
+    fun `SearchResults maps to MoviePage and drops null or id-less results`() {
+        val dto = SearchResults(
+            page = 2,
+            totalPages = 5,
+            results = listOf(
+                SearchResults.Result(id = 1, title = "A", posterPath = "/a.jpg"),
+                null,
+                SearchResults.Result(id = null, title = "no id"),
+                SearchResults.Result(id = 0, title = "zero id"),
+                SearchResults.Result(id = 2, title = null, posterPath = "  "),
+            ),
+        )
+
+        val page = dto.toDomain()
+
+        assertEquals(2, page.page)
+        assertEquals(5, page.totalPages)
+        assertEquals(
+            listOf(Movie(1, "A", "https://image.tmdb.org/t/p/w500/a.jpg"), Movie(2, "", null)),
+            page.movies,
+        )
+    }
+
+    @Test
+    fun `MovieDetail maps nested cast and origin country`() {
+        val dto = MovieDetail(
+            id = 10,
+            title = "T",
+            originCountry = listOf("US", null),
+            credits = MovieDetail.Credits(
+                cast = listOf(
+                    MovieDetail.Credits.Cast(id = 3, name = "N", character = "C", profilePath = "/p.jpg"),
+                    null,
+                ),
+            ),
+        )
+
+        val detail = dto.toDomain()
+
+        assertEquals(10, detail.id)
+        assertEquals("T", detail.title)
+        assertEquals(listOf("US"), detail.originCountry)
+        assertEquals(listOf(Cast(3, "N", "C", "https://image.tmdb.org/t/p/w500/p.jpg")), detail.cast)
+    }
+
+    @Test
+    fun `MovieDetail with null credits maps to empty cast`() {
+        assertEquals(emptyList<Cast>(), MovieDetail(credits = null).toDomain().cast)
+    }
+
+    @Test
+    fun `blank or null image paths map to null`() {
+        val detail = MovieDetail(posterPath = "", backdropPath = null).toDomain()
+
+        assertNull(detail.posterUrl)
+        assertNull(detail.backdropUrl)
+        assertNull(MovieDetail.Credits.Cast(profilePath = " ").toDomain().profileUrl)
+    }
+
+    @Test
+    fun `image paths map to full urls with size`() {
+        val detail = MovieDetail(posterPath = "/p.jpg", backdropPath = "/b.jpg").toDomain()
+
+        assertEquals("https://image.tmdb.org/t/p/w500/p.jpg", detail.posterUrl)
+        assertEquals("https://image.tmdb.org/t/p/original/b.jpg", detail.backdropUrl)
+    }
+}
