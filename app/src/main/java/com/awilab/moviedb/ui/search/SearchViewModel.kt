@@ -2,7 +2,7 @@ package com.awilab.moviedb.ui.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.awilab.common.coroutine.CommonDispatcherProvider
+import com.awilab.common.coroutine.DispatcherProvider
 import com.awilab.domain.model.Movie
 import com.awilab.domain.model.Resource
 import com.awilab.domain.usecase.SearchMoviesUseCase
@@ -30,7 +30,7 @@ import kotlin.time.Duration.Companion.milliseconds
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val searchMoviesUseCase: SearchMoviesUseCase,
-    private val dispatcher: CommonDispatcherProvider,
+    private val dispatcher: DispatcherProvider,
 ) : ViewModel() {
     private val _query = MutableStateFlow("")
     val query: StateFlow<String> = _query.asStateFlow()
