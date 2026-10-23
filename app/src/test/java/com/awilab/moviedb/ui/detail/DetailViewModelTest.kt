@@ -11,6 +11,7 @@ import com.awilab.testing.shouldBe
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -22,7 +23,7 @@ class DetailViewModelTest {
     @get:Rule
     val mainRule = MainDispatcherRule()
 
-    private fun createViewModel(response: Flow<Resource<MovieDetail>>) = DetailViewModel(
+    private fun TestScope.loadDetail(response: Flow<Resource<MovieDetail>>) = DetailViewModel(
         route = DetailRoute(movieId = 42),
         getMovieDetailUseCase = GetMovieDetailUseCase(
             object : DetailRepository {
@@ -30,36 +31,42 @@ class DetailViewModelTest {
             },
         ),
         dispatcher = TestDispatcherProvider(mainRule.dispatcher),
-    )
+    ).also { advanceUntilIdle() }
 
     @Test
     fun `error resets loading and keeps the empty detail`() = runTest(mainRule.dispatcher) {
-        val vm = createViewModel(flow { emit(Resource.Loading); emit(Resource.Error(IOException("HTTP 404"))) })
+        val response = flow { emit(Resource.Loading); emit(Resource.Error(IOException("HTTP 404"))) }
 
-        advanceUntilIdle()
+        val vm = loadDetail(response)
 
         vm.isLoading.value shouldBe false
         vm.movieInfo.value shouldBe MovieDetail()
     }
 
     @Test
-    fun `loading is true while request is in flight and false after success`() = runTest(mainRule.dispatcher) {
-        val gate = CompletableDeferred<Unit>()
-        val vm = createViewModel(
-            flow {
-                emit(Resource.Loading)
-                gate.await()
-                emit(Resource.Success(MovieDetail(id = 42, title = "T")))
-            },
-        )
+    fun `loading is true while request is in flight`() = runTest(mainRule.dispatcher) {
+        val response = gated(CompletableDeferred())
 
-        advanceUntilIdle()
+        val vm = loadDetail(response)
+
         vm.isLoading.value shouldBe true
+    }
+
+    @Test
+    fun `loading is false and detail is shown after success`() = runTest(mainRule.dispatcher) {
+        val gate = CompletableDeferred<Unit>()
+        val vm = loadDetail(gated(gate))
 
         gate.complete(Unit)
         advanceUntilIdle()
 
         vm.isLoading.value shouldBe false
         vm.movieInfo.value shouldBe MovieDetail(id = 42, title = "T")
+    }
+
+    private fun gated(gate: CompletableDeferred<Unit>): Flow<Resource<MovieDetail>> = flow {
+        emit(Resource.Loading)
+        gate.await()
+        emit(Resource.Success(MovieDetail(id = 42, title = "T")))
     }
 }

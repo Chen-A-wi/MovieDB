@@ -36,10 +36,20 @@ class DetailRepositoryImplTest {
         repository.getMovieDetail(movieId = movieId, language = "en-US").toList()
 
     @Test
-    fun `success emits Loading then mapped detail and puts id in path`() = runTest {
+    fun `success emits Loading then mapped detail and ignores unknown fields`() = runTest {
         server.enqueueJson("""{"id":42,"title":"T","unknown_field":{"a":1}}""")
 
-        getDetail() shouldBe listOf(Resource.Loading, Resource.Success(MovieDetail(id = 42, title = "T")))
+        val result = getDetail()
+
+        result shouldBe listOf(Resource.Loading, Resource.Success(MovieDetail(id = 42, title = "T")))
+    }
+
+    @Test
+    fun `movie id is sent in path`() = runTest {
+        server.enqueueJson("""{"id":42}""")
+
+        getDetail(movieId = 42)
+
         server.takeRequest().requestUrl!!.encodedPath shouldBe "/movie/42"
     }
 
@@ -47,34 +57,44 @@ class DetailRepositoryImplTest {
     fun `unknown movie id 404 emits Error with HttpException`() = runTest {
         server.enqueueJson(tmdbError(34, "The resource you requested could not be found."), code = 404)
 
-        getDetail(movieId = -1).shouldBeLoadingThenError<HttpException>().code() shouldBe 404
+        val result = getDetail(movieId = -1)
+
+        result.shouldBeLoadingThenError<HttpException>().code() shouldBe 404
     }
 
     @Test
     fun `500 emits Error with HttpException`() = runTest {
         server.enqueueJson("", code = 500)
 
-        getDetail().shouldBeLoadingThenError<HttpException>().code() shouldBe 500
+        val result = getDetail()
+
+        result.shouldBeLoadingThenError<HttpException>().code() shouldBe 500
     }
 
     @Test
     fun `malformed json emits Error with SerializationException`() = runTest {
         server.enqueueJson("<html>gateway error</html>")
 
-        getDetail().shouldBeLoadingThenError<SerializationException>()
+        val result = getDetail()
+
+        result.shouldBeLoadingThenError<SerializationException>()
     }
 
     @Test
     fun `no response emits Error with SocketTimeoutException`() = runTest {
         server.enqueue(MockResponse().setSocketPolicy(SocketPolicy.NO_RESPONSE))
 
-        getDetail().shouldBeLoadingThenError<SocketTimeoutException>()
+        val result = getDetail()
+
+        result.shouldBeLoadingThenError<SocketTimeoutException>()
     }
 
     @Test
     fun `null credits and countries map to empty lists`() = runTest {
         server.enqueueJson("""{"id":42,"credits":null,"origin_country":null}""")
 
-        getDetail() shouldBe listOf(Resource.Loading, Resource.Success(MovieDetail(id = 42)))
+        val result = getDetail()
+
+        result shouldBe listOf(Resource.Loading, Resource.Success(MovieDetail(id = 42)))
     }
 }
