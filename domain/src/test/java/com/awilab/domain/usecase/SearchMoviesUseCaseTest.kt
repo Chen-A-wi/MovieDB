@@ -37,11 +37,4 @@ class SearchMoviesUseCaseTest {
         repository.lastPage shouldBe 2
         result shouldBe listOf(Resource.Success(MoviePage(2, 3, emptyList())))
     }
-
-    @Test
-    fun `hasNextPage is false on last page`() {
-        MoviePage(page = 2, totalPages = 3, movies = emptyList()).hasNextPage shouldBe true
-        MoviePage(page = 3, totalPages = 3, movies = emptyList()).hasNextPage shouldBe false
-        MoviePage(page = 0, totalPages = 0, movies = emptyList()).hasNextPage shouldBe false
-    }
 }

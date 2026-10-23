@@ -70,13 +70,21 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun `loading is true while request is in flight and false after success`() = runTest(mainRule.dispatcher) {
-        val gate = CompletableDeferred<Unit>()
-        repository.respond = { gated(gate, success(it.page, totalPages = 1)) }
+    fun `loading is true while request is in flight`() = runTest(mainRule.dispatcher) {
+        repository.respond = { gated(CompletableDeferred(), success(it.page, totalPages = 1)) }
         val vm = createViewModel()
 
         type(vm, "batman")
+
         vm.isLoading.value shouldBe true
+    }
+
+    @Test
+    fun `loading is false and results are shown after success`() = runTest(mainRule.dispatcher) {
+        val gate = CompletableDeferred<Unit>()
+        repository.respond = { gated(gate, success(it.page, totalPages = 1)) }
+        val vm = createViewModel()
+        type(vm, "batman")
 
         gate.complete(Unit)
         advanceUntilIdle()
@@ -121,7 +129,7 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun `load more failure resets isLoadingMore, keeps list and can retry`() = runTest(mainRule.dispatcher) {
+    fun `load more failure resets isLoadingMore and keeps list`() = runTest(mainRule.dispatcher) {
         repository.respond = { if (it.page == 1) flowOf(success(1, totalPages = 3)) else error() }
         val vm = createViewModel()
         type(vm, "batman")
@@ -131,6 +139,15 @@ class SearchViewModelTest {
 
         vm.isLoadingMore.value shouldBe false
         vm.searchResultList.value shouldBe movies(page = 1)
+    }
+
+    @Test
+    fun `load more can retry after failure`() = runTest(mainRule.dispatcher) {
+        repository.respond = { if (it.page == 1) flowOf(success(1, totalPages = 3)) else error() }
+        val vm = createViewModel()
+        type(vm, "batman")
+        vm.loadMore()
+        advanceUntilIdle()
 
         vm.loadMore()
         advanceUntilIdle()
@@ -157,9 +174,9 @@ class SearchViewModelTest {
         }
         val vm = createViewModel()
         type(vm, "batman")
-
         vm.loadMore()
         advanceUntilIdle()
+
         vm.loadMore()
         advanceUntilIdle()
 

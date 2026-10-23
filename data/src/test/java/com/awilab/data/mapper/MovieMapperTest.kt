@@ -54,21 +54,37 @@ class MovieMapperTest {
 
     @Test
     fun `MovieDetail with null credits maps to empty cast`() {
-        MovieDetail(credits = null).toDomain().cast shouldBe emptyList()
+        val dto = MovieDetail(credits = null)
+
+        val detail = dto.toDomain()
+
+        detail.cast shouldBe emptyList()
     }
 
     @Test
     fun `blank or null image paths map to null`() {
-        val detail = MovieDetail(posterPath = "", backdropPath = null).toDomain()
+        val dto = MovieDetail(posterPath = "", backdropPath = null)
+
+        val detail = dto.toDomain()
 
         detail.posterUrl shouldBe null
         detail.backdropUrl shouldBe null
-        MovieDetail.Credits.Cast(profilePath = " ").toDomain().profileUrl shouldBe null
+    }
+
+    @Test
+    fun `blank cast profile path maps to null`() {
+        val dto = MovieDetail.Credits.Cast(profilePath = " ")
+
+        val cast = dto.toDomain()
+
+        cast.profileUrl shouldBe null
     }
 
     @Test
     fun `image paths map to full urls with size`() {
-        val detail = MovieDetail(posterPath = "/p.jpg", backdropPath = "/b.jpg").toDomain()
+        val dto = MovieDetail(posterPath = "/p.jpg", backdropPath = "/b.jpg")
+
+        val detail = dto.toDomain()
 
         detail.posterUrl shouldBe "https://image.tmdb.org/t/p/w500/p.jpg"
         detail.backdropUrl shouldBe "https://image.tmdb.org/t/p/original/b.jpg"
