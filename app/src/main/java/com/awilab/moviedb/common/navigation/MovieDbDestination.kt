@@ -11,7 +11,7 @@ import com.awilab.moviedb.R
 data class BottomNavItem(
     val route: NavKey,
     val icon: ImageVector,
-    @StringRes val title: Int,
+    @param:StringRes val title: Int,
 )
 
 val bottomNavItems = listOf(
