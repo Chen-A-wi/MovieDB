@@ -2,7 +2,7 @@ package com.awilab.moviedb.ui.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.awilab.common.coroutine.CommonDispatcherProvider
+import com.awilab.common.coroutine.DispatcherProvider
 import com.awilab.domain.model.MovieDetail
 import com.awilab.domain.model.Resource
 import com.awilab.domain.usecase.GetMovieDetailUseCase
@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 class DetailViewModel @AssistedInject constructor(
     @Assisted private val route: DetailRoute,
     private val getMovieDetailUseCase: GetMovieDetailUseCase,
-    private val dispatcher: CommonDispatcherProvider,
+    private val dispatcher: DispatcherProvider,
 ) : ViewModel() {
     @AssistedFactory
     interface Factory {
