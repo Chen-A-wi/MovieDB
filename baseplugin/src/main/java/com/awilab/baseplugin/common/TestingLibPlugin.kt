@@ -27,6 +27,7 @@ class TestingLibPlugin : Plugin<Project> {
             dependencies {
                 "api"(libs.junit)
                 "api"(libs.androidx.lifecycle.livedata.core)
+                "api"(libs.kotlinx.coroutines.test)
             }
         }
     }
