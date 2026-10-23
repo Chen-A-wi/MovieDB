@@ -53,12 +53,12 @@ class SearchViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             queryFlow.onEach { q -> _query.update { q } }
+                .distinctUntilChanged()
                 .transform {
                     clearResults()
                     emit(it)
                 }
                 .debounce(300L.milliseconds)
-                .distinctUntilChanged()
                 .filter { it.isNotEmpty() }
                 .collectLatest {
                     search(page = 1)
