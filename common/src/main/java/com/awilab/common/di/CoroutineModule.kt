@@ -1,6 +1,5 @@
 package com.awilab.common.di
 
-import com.awilab.common.coroutine.CommonCoroutineScope
 import com.awilab.common.coroutine.CommonDispatcherProvider
 import com.awilab.common.coroutine.DispatcherProvider
 import dagger.Module
@@ -17,12 +16,6 @@ object CoroutineModule {
     @Singleton
     fun provideDispatcherProvider(): DispatcherProvider {
         return CommonDispatcherProvider()
-    }
-
-    @Provides
-    @Singleton
-    fun provideScopeProvider(dispatcherProvider: CommonDispatcherProvider): CommonCoroutineScope {
-        return CommonCoroutineScope(dispatcherProvider)
     }
 
 }

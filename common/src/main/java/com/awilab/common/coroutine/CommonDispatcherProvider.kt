@@ -2,9 +2,8 @@ package com.awilab.common.coroutine
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import javax.inject.Inject
 
-class CommonDispatcherProvider @Inject constructor() : DispatcherProvider {
+class CommonDispatcherProvider : DispatcherProvider {
 
     override val main: CoroutineDispatcher
         get() = Dispatchers.Main
